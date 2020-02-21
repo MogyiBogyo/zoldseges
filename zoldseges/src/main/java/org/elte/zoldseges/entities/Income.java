@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,9 +16,6 @@ public class Income {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(nullable = false)
-    private Integer productID;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -30,4 +28,8 @@ public class Income {
 
     @Column(nullable = false)
     private Integer price;
+
+    @OneToMany(mappedBy = "income")
+    private List<Product> productList;
+
 }

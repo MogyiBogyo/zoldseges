@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,8 +16,8 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private Integer productID;
+    @OneToMany(mappedBy = "stock")
+    private List<Product> productList;
 
     @Column(nullable = false)
     private Integer quantity;

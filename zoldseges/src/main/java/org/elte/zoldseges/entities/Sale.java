@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,9 +18,6 @@ public class Sale {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer productID;
-
-    @Column(nullable = false)
     private Integer quantity;
 
     @Column(nullable = false)
@@ -27,5 +25,8 @@ public class Sale {
 
     @Column(nullable = false)
     private Integer price;
+
+    @OneToMany(mappedBy = "sale")
+    private List<Product> productList;
 
 }

@@ -1,6 +1,7 @@
 package org.elte.zoldseges.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,6 @@ public class WorkTime {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer userID;
-
-    @Column(nullable = false)
     private Date date;
 
     @Column(nullable = false)
@@ -28,5 +26,10 @@ public class WorkTime {
 
     @Column
     private Integer endHour;
+
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private User user;
 
 }
