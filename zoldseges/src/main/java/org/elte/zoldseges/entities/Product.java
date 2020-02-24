@@ -20,8 +20,6 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-
-
     @Column(nullable = false)
     private Integer price;
 
@@ -55,7 +53,5 @@ public class Product {
     @JoinColumn
     @JsonIgnore
     private PlannedOrder plannedOrder;
-
-
 
 }

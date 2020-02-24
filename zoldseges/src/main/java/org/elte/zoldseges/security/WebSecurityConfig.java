@@ -1,4 +1,4 @@
-package security;
+package org.elte.zoldseges.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationEntryPoint getBasicAuthEntryPoint(){
-        return new CustomBasicAuthenticationEntryPoint();
+        return new security.CustomBasicAuthenticationEntryPoint();
     }
 
 }
