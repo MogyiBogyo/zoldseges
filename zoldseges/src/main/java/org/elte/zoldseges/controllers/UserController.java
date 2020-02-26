@@ -3,11 +3,11 @@ package org.elte.zoldseges.controllers;
 import org.elte.zoldseges.entities.User;
 import org.elte.zoldseges.repositories.UserRepository;
 import org.elte.zoldseges.repositories.WorkTimeRepository;
+import org.elte.zoldseges.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import security.AuthenticatedUser;
 import java.util.Optional;
 
 

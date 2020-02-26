@@ -24,7 +24,14 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private AuthenticatedUser authenticatedUser;
 
+    //EZ nem kell ide!
     @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return null;
+    }
+
+    
+    /*@Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
         Optional<User> oUser = userRepository.findByEmail(email);
@@ -37,5 +44,6 @@ public class MyUserDetailsService implements UserDetailsService {
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
-    }
+    }*/
+
 }

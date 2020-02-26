@@ -44,16 +44,16 @@ public class WorkTimeController {
         return ResponseEntity.ok(savedWorkTime);
     }
 
-    /*@PutMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<WorkTime> put(@RequestBody WorkTime worktime, @PathVariable Integer id) {
         Optional<WorkTime> oWorkTime = workTimeRepository.findById(id);
         if (oWorkTime.isPresent()) {
-            worktime.setId(id);
-            return ResponseEntity.ok(courseRepository.save(course));
+            //worktime.setId(id);
+            return ResponseEntity.ok(workTimeRepository.save(worktime));
         } else {
             return ResponseEntity.notFound().build();
         }
-    }*/
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
         Optional<WorkTime> optionalWorkTime= workTimeRepository.findById(id);

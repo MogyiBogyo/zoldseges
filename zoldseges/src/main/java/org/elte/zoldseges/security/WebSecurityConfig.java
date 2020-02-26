@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationEntryPoint getBasicAuthEntryPoint(){
-        return new security.CustomBasicAuthenticationEntryPoint();
+        return new CustomBasicAuthenticationEntryPoint();
     }
 
 }

@@ -1,4 +1,4 @@
-package security;
+package org.elte.zoldseges.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

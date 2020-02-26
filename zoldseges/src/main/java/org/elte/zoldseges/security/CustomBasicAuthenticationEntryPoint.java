@@ -1,4 +1,4 @@
-package security;
+package org.elte.zoldseges.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
