@@ -1,6 +1,8 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.entities.Stock;
+import org.elte.zoldseges.repositories.ProductRepository;
 import org.elte.zoldseges.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,9 @@ import java.util.Optional;
 public class StockController {
     @Autowired
     private StockRepository stockRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
 
     /**
@@ -80,6 +85,15 @@ public class StockController {
         }
     }
 
+    @GetMapping("/{id}/products")
+    public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
+        Optional<Stock> optionalStock = stockRepository.findById(id);
+        if (optionalStock.isPresent()) {
+            return ResponseEntity.ok(optionalStock.get().getProductList());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 }

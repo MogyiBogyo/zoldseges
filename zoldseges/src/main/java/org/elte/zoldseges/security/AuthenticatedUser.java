@@ -15,7 +15,4 @@ import org.springframework.web.context.annotation.RequestScope;
 public class AuthenticatedUser {
     private User user;
 
-    public User getUser() {
-        return user;
-    }
 }

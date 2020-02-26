@@ -1,9 +1,8 @@
 package org.elte.zoldseges.entities;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,16 +22,31 @@ public class User {
     @Column(nullable = false)
     private String givenName;
 
+    @Column(unique = true)
+    private String username;
+
     @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
+    /*@Column(nullable = false)
+    private boolean isAdmin;*/
+
     @Column(nullable = false)
-    private boolean isAdmin;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<WorkTime> workTimeList;
 
+    /*public Role getRole() {
+        return role;
+    }*/
+
+    public enum Role {
+        ROLE_WORKER, ROLE_ADMIN;
+    }
 }

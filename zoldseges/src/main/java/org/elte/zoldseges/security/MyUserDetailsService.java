@@ -24,19 +24,12 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private AuthenticatedUser authenticatedUser;
 
-    //EZ nem kell ide!
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
-    }
-
-/*
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
-        Optional<User> oUser = userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> oUser = userRepository.findByEmail(username);
         if (!oUser.isPresent()) {
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException(username);
         }
         User user = oUser.get();
         authenticatedUser.setUser(user);
@@ -45,5 +38,5 @@ public class MyUserDetailsService implements UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
     }
-*/
+
 }

@@ -84,10 +84,12 @@ public class ProductController {
         }
     }
 
-    //TODO: get category, set category
-/*
+    /**
+     * @param id
+     * @return return category of the product
+     */
     @GetMapping("/{id}/category")
-    public ResponseEntity<Product> getCategory(@PathVariable Integer id) {
+    public ResponseEntity<Category> getCategory(@PathVariable Integer id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
             return ResponseEntity.ok(optionalProduct.get().getCategory());
@@ -96,16 +98,5 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/{id}/category")
-    public ResponseEntity<Category> insertCategory(@PathVariable Integer id, @RequestBody Category category) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            category.setProduct(product);
-            return ResponseEntity.ok(categoryRepository.save(category));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-*/
+
 }

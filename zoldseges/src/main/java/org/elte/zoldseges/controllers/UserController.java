@@ -29,12 +29,18 @@ public class UserController {
     private WorkTimeRepository workTimeRepository;
 
 
-
+    /**
+     * @return return all user
+     */
     @GetMapping("")
     public ResponseEntity<Iterable<User>> getAll() {
         return ResponseEntity.ok(userRepository.findAll());
     }
 
+    /**
+     * @param id
+     * @return return user with this id, if it exists
+     */
     @GetMapping("/{id}")
     public ResponseEntity<User> get(@PathVariable Integer id) {
         Optional<User> User = userRepository.findById(id);
@@ -50,8 +56,6 @@ public class UserController {
         User savedUser = userRepository.save(User);
         return ResponseEntity.ok(savedUser);
     }
-
-
 
     @PostMapping("login")
     public ResponseEntity login() {

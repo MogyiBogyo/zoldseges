@@ -1,5 +1,6 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.entities.Sale;
 import org.elte.zoldseges.repositories.ProductRepository;
 import org.elte.zoldseges.repositories.SaleRepository;
@@ -85,5 +86,15 @@ public class SaleController {
     }
 
     //TODO: get products
+    @GetMapping("/{id}/product")
+    public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        if (optionalSale.isPresent()) {
+            return ResponseEntity.ok(optionalSale.get().getProductList());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

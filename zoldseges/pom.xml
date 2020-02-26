@@ -12,10 +12,10 @@
 	<artifactId>zoldseges</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>zoldseges</name>
-	<description>Demo project for Spring Boot</description>
+	<description> </description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>13</java.version>
 	</properties>
 
 	<dependencies>
