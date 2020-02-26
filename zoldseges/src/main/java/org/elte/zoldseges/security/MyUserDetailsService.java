@@ -30,8 +30,8 @@ public class MyUserDetailsService implements UserDetailsService {
         return null;
     }
 
-    
-    /*@Override
+/*
+    @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
         Optional<User> oUser = userRepository.findByEmail(email);
@@ -44,6 +44,6 @@ public class MyUserDetailsService implements UserDetailsService {
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
-    }*/
-
+    }
+*/
 }
