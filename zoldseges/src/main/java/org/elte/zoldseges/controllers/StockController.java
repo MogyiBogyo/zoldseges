@@ -85,7 +85,7 @@ public class StockController {
         }
     }
 
-    @GetMapping("/{id}/products")
+    /*@GetMapping("/{id}/products")
     public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
         Optional<Stock> optionalStock = stockRepository.findById(id);
         if (optionalStock.isPresent()) {
@@ -93,7 +93,7 @@ public class StockController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
+    }*/
 
 
 }

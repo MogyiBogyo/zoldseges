@@ -1,6 +1,7 @@
 package org.elte.zoldseges.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,13 @@ public class Sale {
     @Column(nullable = false)
     private Integer price;
 
+    /*
     @OneToMany(mappedBy = "sale")
     private List<Product> productList;
+     */
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private Product product;
 
 }

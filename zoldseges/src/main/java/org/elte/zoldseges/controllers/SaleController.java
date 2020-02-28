@@ -85,7 +85,7 @@ public class SaleController {
         }
     }
 
-    //TODO: get products
+    /*//TODO: get products
     @GetMapping("/{id}/product")
     public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
         Optional<Sale> optionalSale = saleRepository.findById(id);
@@ -95,6 +95,6 @@ public class SaleController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    */
 
 }

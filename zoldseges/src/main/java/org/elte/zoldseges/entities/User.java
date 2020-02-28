@@ -17,10 +17,10 @@ public class User {
     private Integer id;
 
     @Column(nullable = false)
-    private String familyName;
+    private String familyname;
 
     @Column(nullable = false)
-    private String givenName;
+    private String givenname;
 
     @Column(unique = true)
     private String username;

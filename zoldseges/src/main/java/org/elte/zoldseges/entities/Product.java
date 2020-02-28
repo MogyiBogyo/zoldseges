@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,11 +35,30 @@ public class Product {
     @JsonIgnore
     private Category category;
 
+
+    /*
     @ManyToOne
     @JoinColumn
     @JsonIgnore
     private Stock stock;
 
+
+    */
+
+    @OneToMany(mappedBy = "product")
+    private List<Stock> stockList;
+
+
+    @OneToMany(mappedBy = "product")
+    private List<Income> incomeList;
+
+    @OneToMany(mappedBy = "product")
+    private List<Sale> saleList;
+
+    @OneToMany(mappedBy = "product")
+    private List<PlannedOrder> plannedOrderList;
+
+    /*
     @ManyToOne
     @JoinColumn
     @JsonIgnore
@@ -53,5 +73,8 @@ public class Product {
     @JoinColumn
     @JsonIgnore
     private PlannedOrder plannedOrder;
+
+     */
+
 
 }
