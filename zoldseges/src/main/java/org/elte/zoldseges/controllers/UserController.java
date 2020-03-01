@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 
@@ -55,6 +56,18 @@ public class UserController {
     public ResponseEntity<User> post(@RequestBody User User) {
         User savedUser = userRepository.save(User);
         return ResponseEntity.ok(savedUser);
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<User> register(@RequestBody User user) {
+        Optional<User> oUser = userRepository.findByUsername(user.getUsername());
+        if (oUser.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //user.setEnabled(true);
+        user.setRole(User.Role.ROLE_WORKER);
+        return ResponseEntity.ok(userRepository.save(user));
     }
 
     @PostMapping("login")
