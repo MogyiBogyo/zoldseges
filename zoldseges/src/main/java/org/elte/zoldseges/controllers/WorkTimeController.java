@@ -46,6 +46,7 @@ public class WorkTimeController {
      * @param worktime
      *
      * @return adds a new worktime
+     * TODO: valid user id check
      */
     @PostMapping("")
     public ResponseEntity<WorkTime> post(@RequestBody WorkTime worktime) {
@@ -88,6 +89,7 @@ public class WorkTimeController {
      * @param id
      * @return return the user of the worktime, if it exists
      */
+
     @GetMapping("/{id}/user")
     public ResponseEntity<User> getUser(@PathVariable Integer id) {
         Optional<WorkTime> workTime = workTimeRepository.findById(id);

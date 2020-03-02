@@ -23,14 +23,14 @@ public class WorkTime {
     private Date date;
 
     @Column(nullable = false)
-    private Integer startHour;
+    private String startHour;
 
     @Column
-    private Integer endHour;
+    private String endHour;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+    //@JsonIgnore
     private User user;
 
 }

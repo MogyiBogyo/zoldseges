@@ -1,7 +1,6 @@
 package org.elte.zoldseges.controllers;
 
 import org.elte.zoldseges.entities.Category;
-import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.CategoryRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
 import org.elte.zoldseges.security.AuthenticatedUser;

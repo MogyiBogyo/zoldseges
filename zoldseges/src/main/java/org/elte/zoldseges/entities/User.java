@@ -42,9 +42,6 @@ public class User {
     @JsonIgnore
     private List<WorkTime> workTimeList;
 
-    /*public Role getRole() {
-        return role;
-    }*/
 
     public enum Role {
         ROLE_WORKER, ROLE_ADMIN;
