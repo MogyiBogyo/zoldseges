@@ -48,10 +48,16 @@ public class WorkTimeController {
      * @return adds a new worktime
      * TODO: valid user id check
      */
-    @PostMapping("")
-    public ResponseEntity<WorkTime> post(@RequestBody WorkTime worktime) {
-        WorkTime savedWorkTime = workTimeRepository.save(worktime);
-        return ResponseEntity.ok(savedWorkTime);
+    @PostMapping("new/{id}")
+    public ResponseEntity<WorkTime> post(@RequestBody WorkTime worktime, @PathVariable Integer id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            WorkTime savedWorkTime = workTimeRepository.save(worktime);
+            return ResponseEntity.ok(savedWorkTime);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     /**
