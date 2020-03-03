@@ -1,6 +1,7 @@
 package org.elte.zoldseges.controllers;
 
 import org.elte.zoldseges.entities.User;
+import org.elte.zoldseges.entities.WorkTime;
 import org.elte.zoldseges.repositories.UserRepository;
 import org.elte.zoldseges.repositories.WorkTimeRepository;
 import org.elte.zoldseges.security.AuthenticatedUser;
@@ -86,4 +87,15 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{id}/worktimes")
+    public ResponseEntity<Iterable<WorkTime>> worktimes(@PathVariable Integer id) {
+        Optional<User> oUser = userRepository.findById(id);
+        if (oUser.isPresent()) {
+            return ResponseEntity.ok(oUser.get().getWorkTimeList());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

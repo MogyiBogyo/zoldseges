@@ -1,6 +1,7 @@
 package org.elte.zoldseges.controllers;
 
 import org.elte.zoldseges.entities.Category;
+import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.CategoryRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
 import org.elte.zoldseges.security.AuthenticatedUser;
@@ -41,6 +42,16 @@ public class CategoryController {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             return ResponseEntity.ok(optionalCategory.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/productlist")
+    public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (optionalCategory.isPresent()) {
+            return ResponseEntity.ok(optionalCategory.get().getProductList());
         } else {
             return ResponseEntity.notFound().build();
         }
