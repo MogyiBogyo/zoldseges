@@ -16,6 +16,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
+
+
     @Autowired
     private CategoryRepository categoryRepository;
 

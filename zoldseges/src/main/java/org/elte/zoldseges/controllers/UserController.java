@@ -1,5 +1,6 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.UserDto;
 import org.elte.zoldseges.entities.User;
 import org.elte.zoldseges.entities.WorkTime;
 import org.elte.zoldseges.repositories.UserRepository;
@@ -17,6 +18,19 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    private User converToDto(UserDto userDto){
+       return new User(userDto.getId(),
+                userDto.getFamilyname(),
+                userDto.getGivenname(),
+                userDto.getUsername(),
+                userDto.getEmail(),
+                userDto.getPassword(),
+                userDto.getRole(),
+                userDto.getWorkTimeList()
+                );
+
+    }
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
