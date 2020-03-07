@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -65,24 +67,34 @@ public class CategoryController {
      */
     @PostMapping("")
     public ResponseEntity<Category> post(@RequestBody Category category) {
+
         Category savedCategory = categoryRepository.save(category);
         return ResponseEntity.ok(savedCategory);
     }
 
     /**
-     * @param category
      * @param id
+     * @param productid
      * @return modify a category if id exists
      */
-    @PutMapping("/{id}")
-    public ResponseEntity<Category> put(@RequestBody Category category, @PathVariable Integer id) {
+    /*@PutMapping("/{id}/{productid}")
+    public ResponseEntity<Category> put( @PathVariable Integer id, @PathVariable Integer productid) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
+
+        List<Product> optionalProduct = productRepository.findById(productid);
         if (optionalCategory.isPresent()) {
-            return ResponseEntity.ok(categoryRepository.save(category));
+            if(!optionalProduct.isEmpty()) {
+                List<Product> products = new ArrayList<>();
+                products.add(optionalProduct);
+                Category savedCategory = new Category(optionalCategory.get().getId(), optionalCategory.get().getCategoryName(), optionalCategory.get().getSalePrice(), products);
+                return ResponseEntity.ok(categoryRepository.save(savedCategory));
+            } else{
+               return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
+    }*/
 
     /**
      * @param id
