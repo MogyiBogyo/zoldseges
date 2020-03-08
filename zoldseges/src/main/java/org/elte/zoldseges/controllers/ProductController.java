@@ -42,6 +42,15 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/{id}/category")
+    public ResponseEntity<Category> getProductCategory(@PathVariable Integer id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            return ResponseEntity.ok(optionalProduct.get().getCategory());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     /**
      * @param product
@@ -54,7 +63,6 @@ public class ProductController {
     }
 
     /**
-     * @param product
      * @param id
      * @return modify a product if id exists
      */
@@ -79,20 +87,6 @@ public class ProductController {
         if (optionalProduct.isPresent()) {
             productRepository.deleteById(id);
             return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    /**
-     * @param id
-     * @return return category of the product
-     */
-    @GetMapping("/{id}/category")
-    public ResponseEntity<Category> getCategory(@PathVariable Integer id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            return ResponseEntity.ok(optionalProduct.get().getCategory());
         } else {
             return ResponseEntity.notFound().build();
         }
