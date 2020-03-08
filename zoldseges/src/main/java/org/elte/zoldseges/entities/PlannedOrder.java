@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -21,13 +22,23 @@ public class PlannedOrder {
     @Column(nullable = false)
     private Integer quantity;
 
-    /*
-    @OneToMany(mappedBy = "plannedOrder")
-    private List<Product> productList;
-
-     */
     @ManyToOne
     @JoinColumn
     @JsonIgnore
     private Product product;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlannedOrder)) return false;
+        PlannedOrder that = (PlannedOrder) o;
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getQuantity(), that.getQuantity()) &&
+                Objects.equals(getProduct(), that.getProduct());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getQuantity(), getProduct());
+    }
 }

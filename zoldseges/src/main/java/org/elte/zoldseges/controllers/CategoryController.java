@@ -1,6 +1,7 @@
 package org.elte.zoldseges.controllers;
 
 import org.elte.zoldseges.entities.Category;
+import org.elte.zoldseges.entities.Income;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.CategoryRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
@@ -74,27 +75,17 @@ public class CategoryController {
 
     /**
      * @param id
-     * @param productid
      * @return modify a category if id exists
      */
-    /*@PutMapping("/{id}/{productid}")
-    public ResponseEntity<Category> put( @PathVariable Integer id, @PathVariable Integer productid) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> put(@RequestBody Category category, @PathVariable Integer id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
-
-        List<Product> optionalProduct = productRepository.findById(productid);
         if (optionalCategory.isPresent()) {
-            if(!optionalProduct.isEmpty()) {
-                List<Product> products = new ArrayList<>();
-                products.add(optionalProduct);
-                Category savedCategory = new Category(optionalCategory.get().getId(), optionalCategory.get().getCategoryName(), optionalCategory.get().getSalePrice(), products);
-                return ResponseEntity.ok(categoryRepository.save(savedCategory));
-            } else{
-               return ResponseEntity.notFound().build();
-            }
+            return ResponseEntity.ok(categoryRepository.save(category));
         } else {
             return ResponseEntity.notFound().build();
         }
-    }*/
+    }
 
     /**
      * @param id

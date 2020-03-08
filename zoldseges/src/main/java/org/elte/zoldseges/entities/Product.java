@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -35,16 +36,6 @@ public class Product {
     @JsonIgnore
     private Category category;
 
-
-    /*
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Stock stock;
-
-
-    */
-
     @OneToMany(mappedBy = "product")
     private List<Stock> stockList;
 
@@ -58,23 +49,25 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<PlannedOrder> plannedOrderList;
 
-    /*
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Income income;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return isSale() == product.isSale() &&
+                Objects.equals(getId(), product.getId()) &&
+                Objects.equals(getName(), product.getName()) &&
+                Objects.equals(getPrice(), product.getPrice()) &&
+                Objects.equals(getSalePrice(), product.getSalePrice()) &&
+                Objects.equals(getCategory(), product.getCategory()) &&
+                Objects.equals(getStockList(), product.getStockList()) &&
+                Objects.equals(getIncomeList(), product.getIncomeList()) &&
+                Objects.equals(getSaleList(), product.getSaleList()) &&
+                Objects.equals(getPlannedOrderList(), product.getPlannedOrderList());
+    }
 
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Sale sale;
-
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private PlannedOrder plannedOrder;
-
-     */
-
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getPrice(), getSalePrice(), isSale(), getCategory(), getStockList(), getIncomeList(), getSaleList(), getPlannedOrderList());
+    }
 }

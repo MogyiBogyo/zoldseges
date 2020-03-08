@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -31,9 +32,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    /*@Column(nullable = false)
-    private boolean isAdmin;*/
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -42,8 +40,39 @@ public class User {
     @JsonIgnore
     private List<WorkTime> workTimeList;
 
-
     public enum Role {
         ROLE_WORKER, ROLE_ADMIN;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", familyname='" + familyname + '\'' +
+                ", givenname='" + givenname + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", workTimeList=" + workTimeList +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getFamilyname(), user.getFamilyname()) &&
+                Objects.equals(getGivenname(), user.getGivenname()) &&
+                Objects.equals(getUsername(), user.getUsername()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                getRole() == user.getRole() &&
+                Objects.equals(getWorkTimeList(), user.getWorkTimeList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFamilyname(), getGivenname(), getUsername(), getEmail(), getPassword(), getRole(), getWorkTimeList());
     }
 }

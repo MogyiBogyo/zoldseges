@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -17,10 +18,6 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /*
-    @OneToMany(mappedBy = "stock")
-    private List<Product> productList;
-    */
     @ManyToOne
     @JoinColumn
     @JsonIgnore
@@ -28,4 +25,19 @@ public class Stock {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Stock)) return false;
+        Stock stock = (Stock) o;
+        return Objects.equals(getId(), stock.getId()) &&
+                Objects.equals(getProduct(), stock.getProduct()) &&
+                Objects.equals(getQuantity(), stock.getQuantity());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getProduct(), getQuantity());
+    }
 }

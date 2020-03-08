@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -31,13 +32,26 @@ public class Sale {
     @Column(nullable = false)
     private Integer price;
 
-    /*
-    @OneToMany(mappedBy = "sale")
-    private List<Product> productList;
-     */
     @ManyToOne
     @JoinColumn
     @JsonIgnore
     private Product product;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Sale)) return false;
+        Sale sale = (Sale) o;
+        return Objects.equals(getId(), sale.getId()) &&
+                Objects.equals(getQuantity(), sale.getQuantity()) &&
+                Objects.equals(getDate(), sale.getDate()) &&
+                Objects.equals(getBuyer(), sale.getBuyer()) &&
+                Objects.equals(getPrice(), sale.getPrice()) &&
+                Objects.equals(getProduct(), sale.getProduct());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getQuantity(), getDate(), getBuyer(), getPrice(), getProduct());
+    }
 }
