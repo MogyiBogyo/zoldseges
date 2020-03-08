@@ -37,6 +37,14 @@ public class Sale {
     @JsonIgnore
     private Product product;
 
+    public Sale(Integer quantity, Date date, String buyer, Integer price, Product product) {
+        this.quantity = quantity;
+        this.date = date;
+        this.buyer = buyer;
+        this.price = price;
+        this.product = product;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

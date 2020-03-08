@@ -44,6 +44,16 @@ public class User {
         ROLE_WORKER, ROLE_ADMIN;
     }
 
+    public User(String familyname, String givenname, String username, String email, String password, Role role, List<WorkTime> workTimeList) {
+        this.familyname = familyname;
+        this.givenname = givenname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.workTimeList = workTimeList;
+    }
+
     @Override
     public String toString() {
         return "User{" +

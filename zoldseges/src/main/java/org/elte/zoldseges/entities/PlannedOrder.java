@@ -27,6 +27,11 @@ public class PlannedOrder {
     @JsonIgnore
     private Product product;
 
+    public PlannedOrder(Integer quantity, Product product) {
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

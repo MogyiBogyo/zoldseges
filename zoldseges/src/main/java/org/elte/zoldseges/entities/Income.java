@@ -36,6 +36,14 @@ public class Income {
     @JsonIgnore
     private Product product;
 
+    public Income(Integer quantity, String seller, Date date, Integer price, Product product) {
+        this.quantity = quantity;
+        this.seller = seller;
+        this.date = date;
+        this.price = price;
+        this.product = product;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

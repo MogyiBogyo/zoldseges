@@ -26,6 +26,11 @@ public class Stock {
     @Column(nullable = false)
     private Integer quantity;
 
+    public Stock(Product product, Integer quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

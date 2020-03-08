@@ -38,9 +38,10 @@ public class UserDto {
         return username;
     }
 
-    public String getPassword(){
+    /*public String getPassword(){
         return password;
-    }
+    }*/
+
     public String getEmail() {
         return email;
     }
@@ -82,5 +83,9 @@ public class UserDto {
 
     public List<WorkTime> getWorkTimeList() {
         return workTimeList;
+    }
+
+    public User makeUserEntity(){
+        return new User(this.familyname, this.givenname, this.username, this.email, this.password, this.role, this.workTimeList );
     }
 }

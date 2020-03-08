@@ -49,6 +49,14 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<PlannedOrder> plannedOrderList;
 
+    public Product(String name, Integer price, Integer salePrice, boolean isSale, Category category) {
+        this.name = name;
+        this.price = price;
+        this.salePrice = salePrice;
+        this.isSale = isSale;
+        this.category = category;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

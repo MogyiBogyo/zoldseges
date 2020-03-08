@@ -33,6 +33,13 @@ public class WorkTime {
     @JoinColumn
     private User user;
 
+    public WorkTime(Date date, String startHour, String endHour, User user) {
+        this.date = date;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

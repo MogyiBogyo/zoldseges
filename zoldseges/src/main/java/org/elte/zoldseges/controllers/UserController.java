@@ -19,10 +19,10 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
-    private User converToDto(UserDto userDto){
+    /*private User converToDto(UserDto userDto){
        User newUwser = new User(userDto.getId(), userDto.getFamilyname(), userDto.getGivenname(), userDto.getUsername(), userDto.getEmail(), userDto.getPassword(), userDto.getRole(), userDto.getWorkTimeList());
         return newUwser;
-    }
+    }*/
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
