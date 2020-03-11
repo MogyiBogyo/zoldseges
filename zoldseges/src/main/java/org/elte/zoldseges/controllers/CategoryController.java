@@ -1,5 +1,6 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.CategoryDto;
 import org.elte.zoldseges.entities.Category;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.CategoryRepository;
@@ -64,9 +65,18 @@ public class CategoryController {
      * @return add a new category
      */
     @PostMapping("")
-    public ResponseEntity<Category> post(@RequestBody Category category) {
-        Category savedCategory = categoryRepository.save(category);
+    public ResponseEntity<Category> post(@RequestBody CategoryDto category) {
+        Category savedCategory = categoryRepository.save(mapFromCategoryDtoToCategoryEntity(category));
         return ResponseEntity.ok(savedCategory);
+    }
+    private Category mapFromCategoryDtoToCategoryEntity(CategoryDto category){
+        Category category1 = new Category(
+                category.getName(),
+                category.getSalePrice(),
+                category.isSale(),
+                category.getProductList()
+        );
+        return category1;
     }
 
     /**

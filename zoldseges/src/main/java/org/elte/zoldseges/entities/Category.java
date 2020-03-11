@@ -28,5 +28,10 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Product> productList;
 
-
+    public Category(String categoryName, Integer salePrice, boolean isSale, List<Product> productList) {
+        this.categoryName = categoryName;
+        this.salePrice = salePrice;
+        this.isSale = isSale;
+        this.productList = productList;
+    }
 }
