@@ -27,7 +27,7 @@ public class User {
     @Column(unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -37,6 +37,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column
+    private boolean enable;
+
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<WorkTime> workTimeList;
@@ -45,13 +48,24 @@ public class User {
         ROLE_WORKER, ROLE_ADMIN;
     }
 
-    public User(String familyname, String givenname, String username, String email, String password, Role role, List<WorkTime> workTimeList) {
+    public User(String familyname, String givenname, String username, String email, String password, Role role, boolean enable, List<WorkTime> workTimeList) {
         this.familyname = familyname;
         this.givenname = givenname;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.enable = enable;
+        this.workTimeList = workTimeList;
+    }
+
+    public User(String familyname, String givenname, String username, String email, String password, boolean enable, List<WorkTime> workTimeList) {
+        this.familyname = familyname;
+        this.givenname = givenname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.enable = enable;
         this.workTimeList = workTimeList;
     }
 
@@ -63,6 +77,8 @@ public class User {
                 ", givenname='" + givenname + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
+                ", role=" + role +
+                ", enabled=" + enable +
                 ", workTimeList=" + workTimeList +
                 '}';
     }
@@ -70,20 +86,21 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) &&
-                Objects.equals(getFamilyname(), user.getFamilyname()) &&
-                Objects.equals(getGivenname(), user.getGivenname()) &&
-                Objects.equals(getUsername(), user.getUsername()) &&
-                Objects.equals(getEmail(), user.getEmail()) &&
-                Objects.equals(getPassword(), user.getPassword()) &&
-                getRole() == user.getRole() &&
-                Objects.equals(getWorkTimeList(), user.getWorkTimeList());
+        return enable == user.enable &&
+                id.equals(user.id) &&
+                familyname.equals(user.familyname) &&
+                givenname.equals(user.givenname) &&
+                username.equals(user.username) &&
+                email.equals(user.email) &&
+                password.equals(user.password) &&
+                role == user.role &&
+                Objects.equals(workTimeList, user.workTimeList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFamilyname(), getGivenname(), getUsername(), getEmail(), getPassword(), getRole(), getWorkTimeList());
+        return Objects.hash(id, familyname, givenname, username, email, password, role, enable, workTimeList);
     }
 }

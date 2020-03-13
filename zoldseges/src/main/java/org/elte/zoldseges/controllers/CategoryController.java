@@ -1,5 +1,6 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.CategoryDto;
 import org.elte.zoldseges.entities.Category;
 import org.elte.zoldseges.entities.Income;
 import org.elte.zoldseges.entities.Product;
@@ -52,7 +53,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/{id}/productlist")
+    @GetMapping("/productlist/{id}")
     public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
@@ -67,10 +68,19 @@ public class CategoryController {
      * @return add a new category
      */
     @PostMapping("")
-    public ResponseEntity<Category> post(@RequestBody Category category) {
+    public ResponseEntity<Category> post(@RequestBody CategoryDto categoryDto) {
 
-        Category savedCategory = categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(mapFromCategoryDtoToCategoryEntity(categoryDto));
         return ResponseEntity.ok(savedCategory);
+    }
+
+    private Category mapFromCategoryDtoToCategoryEntity(CategoryDto category){
+        return  new Category(
+                category.getName(),
+                category.getSalePrice(),
+                category.isSale(),
+                category.getProductList()
+        );
     }
 
     /**
@@ -78,13 +88,22 @@ public class CategoryController {
      * @return modify a category if id exists
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Category> put(@RequestBody Category category, @PathVariable Integer id) {
+    public ResponseEntity<Category> put(@RequestBody CategoryDto categoryDto, @PathVariable Integer id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
-            return ResponseEntity.ok(categoryRepository.save(category));
+
+            return ResponseEntity.ok(categoryRepository.save(modifyEntityWithDto(categoryDto, optionalCategory.get())));
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private Category modifyEntityWithDto(CategoryDto categoryDto, Category findedCategory){
+          findedCategory.setCategoryName(categoryDto.getName());
+          findedCategory.setSalePrice(categoryDto.getSalePrice());
+          findedCategory.setSale(categoryDto.isSale());
+          findedCategory.setProductList(categoryDto.getProductList());
+        return findedCategory;
     }
 
     /**
@@ -101,14 +120,4 @@ public class CategoryController {
             return ResponseEntity.notFound().build();
         }
     }
-    //TODO get products of a category
-    /*@GetMapping("/{id}/products")
-    public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
-        Optional<Category> optionalCategory = categoryRepository.findById(id);
-        if (optionalCategory.isPresent()) {
-            return ResponseEntity.ok(optionalCategory.get().getProductList());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }*/
 }

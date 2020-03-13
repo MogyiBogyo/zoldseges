@@ -11,11 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryDto {
     private Integer id;
+    private String name;
     private Integer salePrice;
     private boolean isSale;
     private List<Product> productList;
 
-    public CategoryDto( Integer salePrice, boolean isSale, List<Product> productList) {
+    public CategoryDto(String name, Integer salePrice, boolean isSale, List<Product> productList) {
+        this.name = name;
         this.salePrice = salePrice;
         this.isSale = isSale;
         this.productList = productList;

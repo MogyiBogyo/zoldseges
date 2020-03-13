@@ -26,6 +26,8 @@ public class UserDto {
 
     private User.Role role;
 
+    private boolean enable;
+
     private List<WorkTime> workTimeList;
 
     public UserDto(String familyname, String givenname, String username, String email, String password, User.Role role, List<WorkTime> workTimeList) {
@@ -37,4 +39,6 @@ public class UserDto {
         this.role = role;
         this.workTimeList = workTimeList;
     }
+
+
 }

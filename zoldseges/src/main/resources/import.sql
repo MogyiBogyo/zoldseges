@@ -1,5 +1,6 @@
-insert into users(familyname, givenname, username, email, password, role) values ('Pisti', 'Nagy', 'pistike', 'pistike@gmail.com', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_ADMIN');
-insert into users(familyname, givenname, username, email, password, role) values ('Kati', 'Kis', 'Katica', 'katalin@gmail.com', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_WORKER');
+insert into users(familyname, givenname, username, email, password, role, enable) values ('Pisti', 'Nagy', 'Pistike', 'pistike@gmail.com', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_ADMIN', true);
+insert into users(familyname, givenname, username, email, password, role, enable) values ('Kati', 'Kis', 'Katica', 'katalin@gmail.com', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_WORKER', true);
+insert into users(familyname, givenname, username, email, password, role, enable) values ('Józsi', 'Ferenc', 'Ferike', 'ferijozsi@gmail.com', '$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..', 'ROLE_WORKER', true);
 
 insert into work_time(date, end_hour, start_hour, user_id) values ('2020-03-05', '08:00', '16:00', 1);
 insert into work_time(date, end_hour, start_hour, user_id) values ('2020-03-06', '09:00', '16:00', 1);
