@@ -31,6 +31,7 @@ public class Stock {
         this.quantity = quantity;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

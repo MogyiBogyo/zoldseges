@@ -64,7 +64,7 @@ public class CategoryController {
     }
 
     /**
-     * @param category
+     * @param categoryDto
      * @return add a new category
      */
     @PostMapping("")

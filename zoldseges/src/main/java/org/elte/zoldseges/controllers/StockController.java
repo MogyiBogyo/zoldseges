@@ -1,6 +1,9 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.SaleDto;
+import org.elte.zoldseges.dto.StockDto;
 import org.elte.zoldseges.entities.Product;
+import org.elte.zoldseges.entities.Sale;
 import org.elte.zoldseges.entities.Stock;
 import org.elte.zoldseges.repositories.ProductRepository;
 import org.elte.zoldseges.repositories.StockRepository;
@@ -18,6 +21,18 @@ public class StockController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    private Stock mapFromDtoToEntity(StockDto stockDto){
+        return new Stock(
+                stockDto.getProduct(),
+                stockDto.getQuantity());
+    }
+
+    private Stock modifyEntityWithDto(StockDto stockDto, Stock findedStock){
+        findedStock.setProduct(stockDto.getProduct());
+        findedStock.setQuantity(stockDto.getQuantity());
+        return findedStock;
+    }
 
 
     /**
@@ -44,27 +59,27 @@ public class StockController {
 
 
     /**
-     * @param stock
+     * @param stockDto
      * @return add a new stock
      */
     @PostMapping("")
-    public ResponseEntity<Stock> post(@RequestBody Stock stock) {
-        Stock savedStock = stockRepository.save(stock);
+    public ResponseEntity<Stock> post(@RequestBody StockDto stockDto) {
+        Stock savedStock = stockRepository.save(mapFromDtoToEntity(stockDto));
         return ResponseEntity.ok(savedStock);
     }
 
 
     /**
-     * @param stock
+     * @param stockDto
      * @param id
      * @return modify a stock with this id, if it exists
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Stock> put(@RequestBody Stock stock, @PathVariable Integer id) {
+    public ResponseEntity<Stock> put(@RequestBody StockDto stockdto, @PathVariable Integer id) {
         Optional<Stock> optionalStock = stockRepository.findById(id);
         if (optionalStock.isPresent()) {
             //stock.setId(id);
-            return ResponseEntity.ok(stockRepository.save(stock));
+            return ResponseEntity.ok(stockRepository.save(modifyEntityWithDto(stockdto, optionalStock.get())));
         } else {
             return ResponseEntity.notFound().build();
         }

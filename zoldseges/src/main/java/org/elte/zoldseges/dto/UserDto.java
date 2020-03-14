@@ -40,5 +40,15 @@ public class UserDto {
         this.workTimeList = workTimeList;
     }
 
+    public UserDto(String familyname, String givenname, String username, String email, String password) {
+        this.familyname = familyname;
+        this.givenname = givenname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = User.Role.ROLE_WORKER;
+        this.workTimeList = null;
+        this.enable = true;
 
+    }
 }

@@ -1,5 +1,8 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.StockDto;
+import org.elte.zoldseges.dto.WorktimeDto;
+import org.elte.zoldseges.entities.Stock;
 import org.elte.zoldseges.entities.User;
 import org.elte.zoldseges.entities.WorkTime;
 import org.elte.zoldseges.repositories.UserRepository;
@@ -19,6 +22,22 @@ public class WorkTimeController {
 
     @Autowired
     private UserRepository userRepository;
+
+    private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto){
+        return new WorkTime(
+               worktimeDto.getDate(),
+               worktimeDto.getStartHour(),
+               worktimeDto.getEndHour(),
+               worktimeDto.getUser());
+    }
+
+    private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime findedWorkTime){
+        findedWorkTime.setDate(worktimeDto.getDate());
+        findedWorkTime.setStartHour(worktimeDto.getStartHour());
+        findedWorkTime.setEndHour(worktimeDto.getEndHour());
+        findedWorkTime.setUser(worktimeDto.getUser());
+        return findedWorkTime;
+    }
 
     /**
      * @return all worktime
@@ -43,16 +62,16 @@ public class WorkTimeController {
     }
 
     /**
-     * @param worktime
+     * @param worktimeDto
      *
      * @return adds a new worktime
      * TODO: valid user id check
      */
     @PostMapping("new/{id}")
-    public ResponseEntity<WorkTime> post(@RequestBody WorkTime worktime, @PathVariable Integer id) {
+    public ResponseEntity<WorkTime> post(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
-            WorkTime savedWorkTime = workTimeRepository.save(worktime);
+            WorkTime savedWorkTime = workTimeRepository.save(mapFromDtoToEntity(worktimeDto));
             return ResponseEntity.ok(savedWorkTime);
         } else {
             return ResponseEntity.notFound().build();
@@ -61,16 +80,16 @@ public class WorkTimeController {
     }
 
     /**
-     * @param worktime
+     * @param worktimeDto
      * @param id
      * @return modify a worktime if the id exists
      */
     @PutMapping("/{id}")
-    public ResponseEntity<WorkTime> put(@RequestBody WorkTime worktime, @PathVariable Integer id) {
+    public ResponseEntity<WorkTime> put(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
         Optional<WorkTime> oWorkTime = workTimeRepository.findById(id);
         if (oWorkTime.isPresent()) {
             //worktime.setId(id);
-            return ResponseEntity.ok(workTimeRepository.save(worktime));
+            return ResponseEntity.ok(workTimeRepository.save(modifyEntityWithDto(worktimeDto,oWorkTime.get())));
         } else {
             return ResponseEntity.notFound().build();
         }

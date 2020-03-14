@@ -1,6 +1,8 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.StockDto;
 import org.elte.zoldseges.dto.UserDto;
+import org.elte.zoldseges.entities.Stock;
 import org.elte.zoldseges.entities.User;
 import org.elte.zoldseges.entities.WorkTime;
 import org.elte.zoldseges.repositories.UserRepository;
@@ -33,6 +35,16 @@ public class UserController {
     @Autowired
     private WorkTimeRepository workTimeRepository;
 
+    private User modifyEntityWithDto(UserDto userDto, User findedUser){
+       findedUser.setFamilyname(userDto.getFamilyname());
+       findedUser.setGivenname(userDto.getGivenname());
+       findedUser.setUsername(userDto.getUsername());
+       findedUser.setEmail(userDto.getEmail());
+       findedUser.setPassword(userDto.getPassword());
+       findedUser.setRole(userDto.getRole());
+       return findedUser;
+    }
+
 
     /**
      * @return return all user
@@ -50,8 +62,6 @@ public class UserController {
     @GetMapping("/disabled")
     public ResponseEntity<Iterable<User>> getAllDisabled(Authentication auth) {
         Optional<User> loggedInUser = userRepository.findByEmail(auth.getName());
-        System.out.println(auth.getName());
-
         if(loggedInUser.isPresent()) {
             if (loggedInUser.get().getRole().equals(User.Role.ROLE_ADMIN)) {
                 return ResponseEntity.ok(userRepository.findByEnable(false));
@@ -134,10 +144,10 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> put(@RequestBody User User, @PathVariable Integer id) {
+    public ResponseEntity<User> put(@RequestBody UserDto userDto, @PathVariable Integer id) {
         Optional<User> oUser = userRepository.findById(id);
         if (oUser.isPresent()) {
-            return ResponseEntity.ok(userRepository.save(User));
+            return ResponseEntity.ok(userRepository.save(modifyEntityWithDto(userDto, oUser.get())));
         } else {
             return ResponseEntity.notFound().build();
         }

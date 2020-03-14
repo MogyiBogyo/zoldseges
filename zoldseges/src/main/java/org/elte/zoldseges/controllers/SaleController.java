@@ -1,5 +1,7 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.ProductDto;
+import org.elte.zoldseges.dto.SaleDto;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.entities.Sale;
 import org.elte.zoldseges.repositories.ProductRepository;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,6 +21,25 @@ public class SaleController {
 
     @Autowired
     private ProductRepository productRepository;
+
+
+    private Sale mapFromDtoToEntity(SaleDto saleDto){
+        return new Sale(
+                saleDto.getQuantity(),
+                saleDto.getDate(),
+                saleDto.getBuyer(),
+                saleDto.getPrice(),
+                saleDto.getProduct());
+    }
+
+    private Sale modifyEntityWithDto(SaleDto saleDto, Sale findedSale){
+       findedSale.setBuyer(saleDto.getBuyer());
+       findedSale.setDate(saleDto.getDate());
+       findedSale.setPrice(saleDto.getPrice());
+       findedSale.setQuantity(saleDto.getQuantity());
+       findedSale.setProduct(saleDto.getProduct());
+        return findedSale;
+    }
 
     /**
      * @return all sale
@@ -41,30 +63,38 @@ public class SaleController {
         }
     }
 
-
+    @GetMapping("/{id}/product")
+    public ResponseEntity<Product> getProducts(@PathVariable Integer id) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        if (optionalSale.isPresent()) {
+            return ResponseEntity.ok(optionalSale.get().getProduct());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
     /**
-     * @param sale
+     * @param saledto
      * @return add a new sale
      */
     @PostMapping("")
-    public ResponseEntity<Sale> post(@RequestBody Sale sale) {
-        Sale savedSale = saleRepository.save(sale);
+    public ResponseEntity<Sale> post(@RequestBody SaleDto saledto) {
+        Sale savedSale = saleRepository.save(mapFromDtoToEntity(saledto));
         return ResponseEntity.ok(savedSale);
     }
 
 
 
     /**
-     * @param sale
+     * @param saledto
      * @param id
      * @return  modify a sale if it exists
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Sale> put(@RequestBody Sale sale, @PathVariable Integer id) {
+    public ResponseEntity<Sale> put(@RequestBody SaleDto saledto, @PathVariable Integer id) {
         Optional<Sale> optionalSale = saleRepository.findById(id);
         if (optionalSale.isPresent()) {
             //sale.setId(id);
-            return ResponseEntity.ok(saleRepository.save(sale));
+            return ResponseEntity.ok(saleRepository.save(modifyEntityWithDto(saledto, optionalSale.get())));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -85,16 +115,8 @@ public class SaleController {
         }
     }
 
-    /*//TODO: get products
-    @GetMapping("/{id}/product")
-    public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
-        Optional<Sale> optionalSale = saleRepository.findById(id);
-        if (optionalSale.isPresent()) {
-            return ResponseEntity.ok(optionalSale.get().getProductList());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    */
+
+
+
 
 }
