@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/stock")
+@RequestMapping("/stocks")
 public class StockController {
     @Autowired
     private StockRepository stockRepository;
@@ -23,14 +23,27 @@ public class StockController {
     private ProductRepository productRepository;
 
     private Stock mapFromDtoToEntity(StockDto stockDto){
-        return new Stock(
-                stockDto.getProduct(),
-                stockDto.getQuantity());
+        Optional<Product> optionalProduct = productRepository.findById(stockDto.getProductId());
+        if(optionalProduct.isPresent()){
+            return new Stock(
+                    optionalProduct.get(),
+                    stockDto.getQuantity());
+        } else {
+            return new Stock(
+                    null,
+                    stockDto.getQuantity());
+        }
+
     }
 
     private Stock modifyEntityWithDto(StockDto stockDto, Stock findedStock){
-        findedStock.setProduct(stockDto.getProduct());
-        findedStock.setQuantity(stockDto.getQuantity());
+        Optional<Product> optionalProduct = productRepository.findById(stockDto.getProductId());
+        if(optionalProduct.isPresent()) {
+            findedStock.setProduct(optionalProduct.get());
+            findedStock.setQuantity(stockDto.getQuantity());
+        } else {
+            findedStock.setQuantity(stockDto.getQuantity());
+        }
         return findedStock;
     }
 
@@ -58,6 +71,17 @@ public class StockController {
     }
 
 
+    @GetMapping("/{id}/product")
+    public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
+        Optional<Stock> stockOptional = stockRepository.findById(id);
+        if (stockOptional.isPresent()) {
+            return ResponseEntity.ok(stockOptional.get().getProduct());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     /**
      * @param stockDto
      * @return add a new stock
@@ -70,7 +94,7 @@ public class StockController {
 
 
     /**
-     * @param stockDto
+     * @param stockdto
      * @param id
      * @return modify a stock with this id, if it exists
      */
@@ -78,7 +102,6 @@ public class StockController {
     public ResponseEntity<Stock> put(@RequestBody StockDto stockdto, @PathVariable Integer id) {
         Optional<Stock> optionalStock = stockRepository.findById(id);
         if (optionalStock.isPresent()) {
-            //stock.setId(id);
             return ResponseEntity.ok(stockRepository.save(modifyEntityWithDto(stockdto, optionalStock.get())));
         } else {
             return ResponseEntity.notFound().build();
@@ -99,16 +122,5 @@ public class StockController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    /*@GetMapping("/{id}/products")
-    public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
-        Optional<Stock> optionalStock = stockRepository.findById(id);
-        if (optionalStock.isPresent()) {
-            return ResponseEntity.ok(optionalStock.get().getProductList());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }*/
-
 
 }

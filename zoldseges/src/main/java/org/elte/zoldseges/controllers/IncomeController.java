@@ -3,6 +3,7 @@ package org.elte.zoldseges.controllers;
 
 import org.elte.zoldseges.dto.IncomeDto;
 import org.elte.zoldseges.entities.Income;
+import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.IncomeRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +24,40 @@ public class IncomeController {
 
 
     private Income mapFromDtoToEntity(IncomeDto incomeDto){
-        return new Income(
-                incomeDto.getQuantity(),
-                incomeDto.getSeller(),
-                incomeDto.getDate(),
-                incomeDto.getPrice(),
-                incomeDto.getProduct()
-        );
+        Optional<Product> optionalProduct = productRepository.findById( incomeDto.getId());
+        if(optionalProduct.isPresent()){
+            return new Income(
+                    incomeDto.getQuantity(),
+                    incomeDto.getSeller(),
+                    incomeDto.getDate(),
+                    incomeDto.getPrice(),
+                    optionalProduct.get()
+            );
+        } else {
+            return new Income(
+                    incomeDto.getQuantity(),
+                    incomeDto.getSeller(),
+                    incomeDto.getDate(),
+                    incomeDto.getPrice(),
+                    null
+            );
+        }
     }
 
     private Income modifyEntityWithDto(IncomeDto incomeDto, Income findedIncome){
-        findedIncome.setQuantity(incomeDto.getQuantity());
-        findedIncome.setDate(incomeDto.getDate());
-        findedIncome.setPrice(incomeDto.getPrice());
-        findedIncome.setSeller(incomeDto.getSeller());
-        findedIncome.setProduct(incomeDto.getProduct());
+        Optional<Product> optionalProduct = productRepository.findById( incomeDto.getId());
+        if(optionalProduct.isPresent()) {
+            findedIncome.setQuantity(incomeDto.getQuantity());
+            findedIncome.setDate(incomeDto.getDate());
+            findedIncome.setPrice(incomeDto.getPrice());
+            findedIncome.setSeller(incomeDto.getSeller());
+            findedIncome.setProduct(optionalProduct.get());
+        } else {
+            findedIncome.setQuantity(incomeDto.getQuantity());
+            findedIncome.setDate(incomeDto.getDate());
+            findedIncome.setPrice(incomeDto.getPrice());
+            findedIncome.setSeller(incomeDto.getSeller());
+        }
         return findedIncome;
     }
 
@@ -105,6 +125,5 @@ public class IncomeController {
         }
     }
 
-    //TODO: get products
 
 }

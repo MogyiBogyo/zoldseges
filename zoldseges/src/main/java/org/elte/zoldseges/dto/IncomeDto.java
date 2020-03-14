@@ -21,13 +21,13 @@ public class IncomeDto {
 
     private Integer price;
 
-    private Product product;
+    private Integer productId;
 
-    public IncomeDto(Integer quantity, String seller, Date date, Integer price, Product product) {
+    public IncomeDto(Integer quantity, String seller, Date date, Integer price, Integer productId) {
         this.quantity = quantity;
         this.seller = seller;
         this.date = date;
         this.price = price;
-        this.product = product;
+        this.productId = productId;
     }
 }

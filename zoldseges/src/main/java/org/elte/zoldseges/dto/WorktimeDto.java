@@ -15,14 +15,13 @@ public class WorktimeDto {
     private Date date;
     private String startHour;
     private String endHour;
-    private User user;
-    UserRepository userRepository;
+    private Integer userId;
 
-    public WorktimeDto(Integer id, Date date, String startHour, String endHour, Integer userId) {
+    public WorktimeDto(Date date, String startHour, String endHour, Integer userId) {
         this.id = id;
         this.date = date;
         this.startHour = startHour;
         this.endHour = endHour;
-        this.user = userRepository.findById(userId).get();
+        this.userId = userId;
     }
 }

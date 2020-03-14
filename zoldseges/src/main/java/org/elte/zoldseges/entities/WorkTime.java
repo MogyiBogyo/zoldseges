@@ -2,6 +2,7 @@ package org.elte.zoldseges.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,8 @@ public class WorkTime {
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnore
+    @JsonProperty(value = "user_password")
     private User user;
 
     public WorkTime(Date date, String startHour, String endHour, User user) {

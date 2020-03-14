@@ -16,13 +16,13 @@ public class SaleDto {
     private Date date;
     private String buyer;
     private Integer price;
-    private Product product;
+    private Integer productId;
 
-    public SaleDto(Integer quantity, Date date, String buyer, Integer price, Product product) {
+    public SaleDto(Integer quantity, Date date, String buyer, Integer price, Integer productId) {
         this.quantity = quantity;
         this.date = date;
         this.buyer = buyer;
         this.price = price;
-        this.product = product;
+        this.productId = productId;
     }
 }

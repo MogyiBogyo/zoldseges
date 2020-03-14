@@ -11,11 +11,11 @@ import org.elte.zoldseges.entities.Product;
 public class PlannedOrderDto {
     private Integer id;
     private Integer quantity;
-    private Product product;
+    private Integer productId;
 
-    public PlannedOrderDto(Integer quantity, Product product) {
+    public PlannedOrderDto(Integer quantity, Integer productId) {
         this.quantity = quantity;
-        this.product = product;
+        this.productId = productId;
     }
 
 }

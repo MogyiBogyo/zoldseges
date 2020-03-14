@@ -25,12 +25,13 @@ public class ProductController {
 
 
     private Product mapFromDtoToEntity(ProductDto productDto){
+        Optional<Category> productCategory = categoryRepository.findById(productDto.getCategoryId());
         return new Product(
                 productDto.getName(),
                 productDto.getPrice(),
                 productDto.getSalePrice(),
                 productDto.isSale(),
-                productDto.getCategory(),
+                productCategory.get(),
                 productDto.getStockList(),
                 productDto.getIncomeList(),
                 productDto.getSaleList(),
@@ -40,11 +41,12 @@ public class ProductController {
     }
 
     private Product modifyEntityWithDto(ProductDto productDto, Product findedProduct){
+        Optional<Category> productCategory = categoryRepository.findById(productDto.getCategoryId());
         findedProduct.setName(productDto.getName());
         findedProduct.setPrice((productDto.getPrice()));
         findedProduct.setSalePrice(productDto.getSalePrice());
         findedProduct.setSale(productDto.isSale());
-        findedProduct.setCategory(productDto.getCategory());
+        findedProduct.setCategory(productCategory.get());
         findedProduct.setStockList(productDto.getStockList());
         findedProduct.setIncomeList(productDto.getIncomeList());
         findedProduct.setSaleList(productDto.getSaleList());
@@ -108,16 +110,19 @@ public class ProductController {
         }
     }
 
-    /**
-     * @param id
-     * @return delete a product if it exists
-     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            productRepository.deleteById(id);
-            return ResponseEntity.ok().build();
+            Product product = optionalProduct.get();
+            if(product.getIncomeList().isEmpty() && product.getPlannedOrderList().isEmpty()
+                &&product.getSaleList().isEmpty() && product.getStockList().isEmpty()) {
+                productRepository.deleteById(id);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

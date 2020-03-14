@@ -24,20 +24,39 @@ public class SaleController {
 
 
     private Sale mapFromDtoToEntity(SaleDto saleDto){
-        return new Sale(
-                saleDto.getQuantity(),
-                saleDto.getDate(),
-                saleDto.getBuyer(),
-                saleDto.getPrice(),
-                saleDto.getProduct());
+        Optional<Product> product =  productRepository.findById(saleDto.getProductId());
+        if (product.isPresent()){
+            return new Sale(
+                    saleDto.getQuantity(),
+                    saleDto.getDate(),
+                    saleDto.getBuyer(),
+                    saleDto.getPrice(),
+                    product.get());
+        } else {
+            return new Sale(
+                    saleDto.getQuantity(),
+                    saleDto.getDate(),
+                    saleDto.getBuyer(),
+                    saleDto.getPrice(),
+                    null);
+        }
     }
 
     private Sale modifyEntityWithDto(SaleDto saleDto, Sale findedSale){
-       findedSale.setBuyer(saleDto.getBuyer());
-       findedSale.setDate(saleDto.getDate());
-       findedSale.setPrice(saleDto.getPrice());
-       findedSale.setQuantity(saleDto.getQuantity());
-       findedSale.setProduct(saleDto.getProduct());
+       Optional<Product> product =  productRepository.findById(saleDto.getProductId());
+        if (product.isPresent()) {
+            findedSale.setBuyer(saleDto.getBuyer());
+            findedSale.setDate(saleDto.getDate());
+            findedSale.setPrice(saleDto.getPrice());
+            findedSale.setQuantity(saleDto.getQuantity());
+            findedSale.setProduct(product.get());
+        } else {
+            findedSale.setBuyer(saleDto.getBuyer());
+            findedSale.setDate(saleDto.getDate());
+            findedSale.setPrice(saleDto.getPrice());
+            findedSale.setQuantity(saleDto.getQuantity());
+            findedSale.setProduct(null);
+        }
         return findedSale;
     }
 
@@ -81,8 +100,6 @@ public class SaleController {
         Sale savedSale = saleRepository.save(mapFromDtoToEntity(saledto));
         return ResponseEntity.ok(savedSale);
     }
-
-
 
     /**
      * @param saledto

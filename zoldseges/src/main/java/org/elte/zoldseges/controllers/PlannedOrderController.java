@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.PrinterURI;
 import java.util.Optional;
 
 
@@ -24,15 +25,28 @@ public class PlannedOrderController {
 
 
     private PlannedOrder mapFromDtoToEntity(PlannedOrderDto plannedOrderDto){
-        return new PlannedOrder(
-                plannedOrderDto.getQuantity(),
-                plannedOrderDto.getProduct()
-        );
+        Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
+        if(optionalProduct.isPresent()) {
+            return new PlannedOrder(
+                    plannedOrderDto.getQuantity(),
+                    optionalProduct.get()
+            );
+        }else {
+            return new PlannedOrder(
+                    plannedOrderDto.getQuantity(),
+                    null
+            );
+        }
     }
 
     private PlannedOrder modifyEntityWithDto(PlannedOrderDto plannedOrderDto, PlannedOrder findedPOrder){
-        findedPOrder.setQuantity(plannedOrderDto.getQuantity());
-        findedPOrder.setProduct(plannedOrderDto.getProduct());
+        Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
+        if(optionalProduct.isPresent()) {
+            findedPOrder.setQuantity(plannedOrderDto.getQuantity());
+            findedPOrder.setProduct(optionalProduct.get());
+        }else {
+            findedPOrder.setQuantity(plannedOrderDto.getQuantity());
+        }
         return findedPOrder;
     }
 
@@ -54,6 +68,16 @@ public class PlannedOrderController {
         Optional<PlannedOrder> optionalPlannedOrder = plannedOrderRepository.findById(id);
         if (optionalPlannedOrder.isPresent()) {
             return ResponseEntity.ok(optionalPlannedOrder.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/product")
+    public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
+        Optional<PlannedOrder> optionalPlannedOrder = plannedOrderRepository.findById(id);
+        if (optionalPlannedOrder.isPresent()) {
+            return ResponseEntity.ok(optionalPlannedOrder.get().getProduct());
         } else {
             return ResponseEntity.notFound().build();
         }

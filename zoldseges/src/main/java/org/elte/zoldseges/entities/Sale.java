@@ -45,21 +45,4 @@ public class Sale {
         this.product = product;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Sale)) return false;
-        Sale sale = (Sale) o;
-        return Objects.equals(getId(), sale.getId()) &&
-                Objects.equals(getQuantity(), sale.getQuantity()) &&
-                Objects.equals(getDate(), sale.getDate()) &&
-                Objects.equals(getBuyer(), sale.getBuyer()) &&
-                Objects.equals(getPrice(), sale.getPrice()) &&
-                Objects.equals(getProduct(), sale.getProduct());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getQuantity(), getDate(), getBuyer(), getPrice(), getProduct());
-    }
 }

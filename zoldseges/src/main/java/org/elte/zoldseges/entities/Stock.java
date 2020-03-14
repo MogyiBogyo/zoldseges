@@ -1,6 +1,7 @@
 package org.elte.zoldseges.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,7 @@ public class Stock {
         if (!(o instanceof Stock)) return false;
         Stock stock = (Stock) o;
         return Objects.equals(getId(), stock.getId()) &&
-                Objects.equals(getProduct(), stock.getProduct()) &&
+                Objects.equals(getProduct(), stock.getProduct().getId()) &&
                 Objects.equals(getQuantity(), stock.getQuantity());
     }
 

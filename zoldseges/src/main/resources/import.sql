@@ -31,5 +31,5 @@ INSERT INTO planned_order(quantity, product_id) VALUES (1, 2);
 INSERT INTO planned_order(quantity, product_id) VALUES (35, 3);
 
 INSERT INTO sale(date, buyer, price, quantity, product_id) VALUES ('2020-03-04','Kis Pisti',470 , 5, 1);
-INSERT INTO sale(date, buyer, price, quantity, product_id) VALUES ('2020-03-04 16:45','Nagy Pisti',470 , 5, 1);
-INSERT INTO sale(date, buyer, price, quantity, product_id) VALUES ('2020-03-04','Fekete Pisti',470 , 5, 1);
+INSERT INTO sale(date, buyer, price, quantity, product_id) VALUES ('2020-03-04 16:45','Nagy Pisti',645 , 12, 1);
+INSERT INTO sale(date, buyer, price, quantity, product_id) VALUES ('2020-03-04','Fekete Pisti',4320 , 5, 1);

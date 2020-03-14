@@ -24,18 +24,40 @@ public class WorkTimeController {
     private UserRepository userRepository;
 
     private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto){
-        return new WorkTime(
-               worktimeDto.getDate(),
-               worktimeDto.getStartHour(),
-               worktimeDto.getEndHour(),
-               worktimeDto.getUser());
+        Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
+        if(optionalUser.isPresent()){
+            return new WorkTime(
+                    worktimeDto.getDate(),
+                    worktimeDto.getStartHour(),
+                    worktimeDto.getEndHour(),
+                    optionalUser.get());
+        }else{
+            return new WorkTime(
+                    worktimeDto.getDate(),
+                    worktimeDto.getStartHour(),
+                    worktimeDto.getEndHour(),
+                    null);
+
+        }
+
     }
 
     private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime findedWorkTime){
-        findedWorkTime.setDate(worktimeDto.getDate());
-        findedWorkTime.setStartHour(worktimeDto.getStartHour());
-        findedWorkTime.setEndHour(worktimeDto.getEndHour());
-        findedWorkTime.setUser(worktimeDto.getUser());
+        Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
+        if(optionalUser.isPresent()) {
+            findedWorkTime.setDate(worktimeDto.getDate());
+            findedWorkTime.setStartHour(worktimeDto.getStartHour());
+            findedWorkTime.setEndHour(worktimeDto.getEndHour());
+            findedWorkTime.setUser(optionalUser.get());
+        }
+         else{
+            findedWorkTime.setDate(worktimeDto.getDate());
+            findedWorkTime.setStartHour(worktimeDto.getStartHour());
+            findedWorkTime.setEndHour(worktimeDto.getEndHour());
+
+        }
+
+
         return findedWorkTime;
     }
 

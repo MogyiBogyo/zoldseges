@@ -31,6 +31,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column
@@ -59,13 +60,13 @@ public class User {
         this.workTimeList = workTimeList;
     }
 
-    public User(String familyname, String givenname, String username, String email, String password, boolean enable, List<WorkTime> workTimeList) {
+    public User(String familyname, String givenname, String username, String email, String password,  List<WorkTime> workTimeList) {
         this.familyname = familyname;
         this.givenname = givenname;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.enable = enable;
+        this.enable = true;
         this.workTimeList = workTimeList;
         this.role = Role.ROLE_WORKER;
     }

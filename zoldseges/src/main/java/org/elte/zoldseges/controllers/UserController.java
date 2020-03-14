@@ -120,8 +120,7 @@ public class UserController {
                 passwordEncoder.encode(userDto.getPassword()),
                 userDto.getRole(),
                 userDto.isEnable(),
-                userDto.getWorkTimeList()
-        );
+                userDto.getWorkTimeList());
     }
 
     @PostMapping("register")
