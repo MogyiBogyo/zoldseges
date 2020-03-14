@@ -1,6 +1,7 @@
 package org.elte.zoldseges.controllers;
 
 
+import org.elte.zoldseges.dto.IncomeDto;
 import org.elte.zoldseges.entities.Income;
 import org.elte.zoldseges.repositories.IncomeRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
@@ -19,6 +20,27 @@ public class IncomeController {
 
     @Autowired
     private ProductRepository productRepository;
+
+
+    private Income mapFromDtoToEntity(IncomeDto incomeDto){
+        return new Income(
+                incomeDto.getQuantity(),
+                incomeDto.getSeller(),
+                incomeDto.getDate(),
+                incomeDto.getPrice(),
+                incomeDto.getProduct()
+        );
+    }
+
+    private Income modifyEntityWithDto(IncomeDto incomeDto, Income findedIncome){
+        findedIncome.setQuantity(incomeDto.getQuantity());
+        findedIncome.setDate(incomeDto.getDate());
+        findedIncome.setPrice(incomeDto.getPrice());
+        findedIncome.setSeller(incomeDto.getSeller());
+        findedIncome.setProduct(incomeDto.getProduct());
+        return findedIncome;
+    }
+
 
     /**
      * @return all Income
@@ -44,26 +66,25 @@ public class IncomeController {
     }
 
     /**
-     * @param income
+     * @param incomeDto
      * @return add a new income
      */
     @PostMapping("")
-    public ResponseEntity<Income> post(@RequestBody Income income) {
-        Income savedIncome = incomeRepository.save(income);
+    public ResponseEntity<Income> post(@RequestBody IncomeDto incomeDto) {
+        Income savedIncome = incomeRepository.save(mapFromDtoToEntity(incomeDto));
         return ResponseEntity.ok(savedIncome);
     }
 
     /**
-     * @param income
+     * @param incomeDto
      * @param id
      * @return modify an income with this id, if it exists
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Income> put(@RequestBody Income income, @PathVariable Integer id) {
+    public ResponseEntity<Income> put(@RequestBody IncomeDto incomeDto, @PathVariable Integer id) {
         Optional<Income> optionalIncome = incomeRepository.findById(id);
         if (optionalIncome.isPresent()) {
-            //income.setId(id);
-            return ResponseEntity.ok(incomeRepository.save(income));
+            return ResponseEntity.ok(incomeRepository.save(modifyEntityWithDto(incomeDto, optionalIncome.get())));
         } else {
             return ResponseEntity.notFound().build();
         }

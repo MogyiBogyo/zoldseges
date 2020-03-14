@@ -1,5 +1,6 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.PlannedOrderDto;
 import org.elte.zoldseges.entities.PlannedOrder;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.PlannedOrderRepository;
@@ -20,6 +21,21 @@ public class PlannedOrderController {
 
     @Autowired
     private ProductRepository productRepository;
+
+
+    private PlannedOrder mapFromDtoToEntity(PlannedOrderDto plannedOrderDto){
+        return new PlannedOrder(
+                plannedOrderDto.getQuantity(),
+                plannedOrderDto.getProduct()
+        );
+    }
+
+    private PlannedOrder modifyEntityWithDto(PlannedOrderDto plannedOrderDto, PlannedOrder findedPOrder){
+        findedPOrder.setQuantity(plannedOrderDto.getQuantity());
+        findedPOrder.setProduct(plannedOrderDto.getProduct());
+        return findedPOrder;
+    }
+
 
     /**
      * @return all planned order
@@ -44,25 +60,25 @@ public class PlannedOrderController {
     }
 
     /**
-     * @param plannedOrder
+     * @param plannedOrderDto
      * @return add a new plan
      */
     @PostMapping("")
-    public ResponseEntity<PlannedOrder> post(@RequestBody PlannedOrder plannedOrder) {
-        PlannedOrder savedPlan = plannedOrderRepository.save(plannedOrder);
+    public ResponseEntity<PlannedOrder> post(@RequestBody PlannedOrderDto plannedOrderDto) {
+        PlannedOrder savedPlan = plannedOrderRepository.save(mapFromDtoToEntity(plannedOrderDto));
         return ResponseEntity.ok(savedPlan);
     }
 
     /**
-     * @param plannedOrder
+     * @param plannedOrderDto
      * @param id
      * @return modify a plan if the id exists
      */
     @PutMapping("/{id}")
-    public ResponseEntity<PlannedOrder> put(@RequestBody PlannedOrder plannedOrder, @PathVariable Integer id) {
+    public ResponseEntity<PlannedOrder> put(@RequestBody PlannedOrderDto plannedOrderDto, @PathVariable Integer id) {
         Optional<PlannedOrder> optionalPlannedOrder = plannedOrderRepository.findById(id);
         if (optionalPlannedOrder.isPresent()) {
-            return ResponseEntity.ok(plannedOrderRepository.save(plannedOrder));
+            return ResponseEntity.ok(plannedOrderRepository.save(modifyEntityWithDto(plannedOrderDto,optionalPlannedOrder.get())));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -82,7 +98,5 @@ public class PlannedOrderController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 
 }

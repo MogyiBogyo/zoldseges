@@ -49,6 +49,18 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<PlannedOrder> plannedOrderList;
 
+    public Product(String name, Integer price, Integer salePrice, boolean isSale, Category category, List<Stock> stockList, List<Income> incomeList, List<Sale> saleList, List<PlannedOrder> plannedOrderList) {
+        this.name = name;
+        this.price = price;
+        this.salePrice = salePrice;
+        this.isSale = isSale;
+        this.category = category;
+        this.stockList = stockList;
+        this.incomeList = incomeList;
+        this.saleList = saleList;
+        this.plannedOrderList = plannedOrderList;
+    }
+
     public Product(String name, Integer price, Integer salePrice, boolean isSale, Category category) {
         this.name = name;
         this.price = price;

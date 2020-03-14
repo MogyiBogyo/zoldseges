@@ -1,6 +1,9 @@
 package org.elte.zoldseges.controllers;
 
+import org.elte.zoldseges.dto.IncomeDto;
+import org.elte.zoldseges.dto.ProductDto;
 import org.elte.zoldseges.entities.Category;
+import org.elte.zoldseges.entities.Income;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.CategoryRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
@@ -19,6 +22,35 @@ public class ProductController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+
+    private Product mapFromDtoToEntity(ProductDto productDto){
+        return new Product(
+                productDto.getName(),
+                productDto.getPrice(),
+                productDto.getSalePrice(),
+                productDto.isSale(),
+                productDto.getCategory(),
+                productDto.getStockList(),
+                productDto.getIncomeList(),
+                productDto.getSaleList(),
+                productDto.getPlannedOrderList()
+
+        );
+    }
+
+    private Product modifyEntityWithDto(ProductDto productDto, Product findedProduct){
+        findedProduct.setName(productDto.getName());
+        findedProduct.setPrice((productDto.getPrice()));
+        findedProduct.setSalePrice(productDto.getSalePrice());
+        findedProduct.setSale(productDto.isSale());
+        findedProduct.setCategory(productDto.getCategory());
+        findedProduct.setStockList(productDto.getStockList());
+        findedProduct.setIncomeList(productDto.getIncomeList());
+        findedProduct.setSaleList(productDto.getSaleList());
+        findedProduct.setPlannedOrderList(productDto.getPlannedOrderList());
+        return findedProduct;
+    }
 
 
     /**
@@ -53,12 +85,12 @@ public class ProductController {
     }
 
     /**
-     * @param product
+     * @param productDto
      * @return adds a new product
      */
     @PostMapping("")
-    public ResponseEntity<Product> post(@RequestBody Product product) {
-        Product savedProduct = productRepository.save(product);
+    public ResponseEntity<Product> post(@RequestBody ProductDto productDto) {
+        Product savedProduct = productRepository.save(mapFromDtoToEntity(productDto));
         return ResponseEntity.ok(savedProduct);
     }
 
@@ -67,11 +99,10 @@ public class ProductController {
      * @return modify a product if id exists
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Product> put(@RequestBody Product product, @PathVariable Integer id) {
+    public ResponseEntity<Product> put(@RequestBody ProductDto productDto, @PathVariable Integer id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            //product.setId(id);
-            return ResponseEntity.ok(productRepository.save(product));
+            return ResponseEntity.ok(productRepository.save(modifyEntityWithDto(productDto,optionalProduct.get())));
         } else {
             return ResponseEntity.notFound().build();
         }
