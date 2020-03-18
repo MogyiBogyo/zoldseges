@@ -37,16 +37,20 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<Stock> stockList;
 
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<Income> incomeList;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<Sale> saleList;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<PlannedOrder> plannedOrderList;
 
     public Product(String name, Integer price, Integer salePrice, boolean isSale, Category category, List<Stock> stockList, List<Income> incomeList, List<Sale> saleList, List<PlannedOrder> plannedOrderList) {

@@ -25,21 +25,11 @@ public class WorkTimeController {
 
     private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto){
         Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
-        if(optionalUser.isPresent()){
-            return new WorkTime(
-                    worktimeDto.getDate(),
-                    worktimeDto.getStartHour(),
-                    worktimeDto.getEndHour(),
-                    optionalUser.get());
-        }else{
-            return new WorkTime(
-                    worktimeDto.getDate(),
-                    worktimeDto.getStartHour(),
-                    worktimeDto.getEndHour(),
-                    null);
-
-        }
-
+        return new WorkTime(
+                worktimeDto.getDate(),
+                worktimeDto.getStartHour(),
+                worktimeDto.getEndHour(),
+                optionalUser.get());
     }
 
     private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime findedWorkTime){
@@ -89,9 +79,10 @@ public class WorkTimeController {
      * @return adds a new worktime
      * TODO: valid user id check
      */
-    @PostMapping("new/{id}")
-    public ResponseEntity<WorkTime> post(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+    @PostMapping("")
+    public ResponseEntity<WorkTime> post(@RequestBody WorktimeDto worktimeDto) {
+
+        Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
         if(optionalUser.isPresent()){
             WorkTime savedWorkTime = workTimeRepository.save(mapFromDtoToEntity(worktimeDto));
             return ResponseEntity.ok(savedWorkTime);
@@ -109,11 +100,10 @@ public class WorkTimeController {
     @PutMapping("/{id}")
     public ResponseEntity<WorkTime> put(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
         Optional<WorkTime> oWorkTime = workTimeRepository.findById(id);
-        if (oWorkTime.isPresent()) {
-            //worktime.setId(id);
+        if (oWorkTime.isPresent() && worktimeDto.getUserId().equals(id)) {
             return ResponseEntity.ok(workTimeRepository.save(modifyEntityWithDto(worktimeDto,oWorkTime.get())));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 

@@ -33,7 +33,6 @@ public class Income {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private Product product;
 
     public Income(Integer quantity, String seller, Date date, Integer price, Product product) {

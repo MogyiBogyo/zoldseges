@@ -3,8 +3,6 @@ package org.elte.zoldseges.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.elte.zoldseges.entities.User;
-import org.elte.zoldseges.repositories.UserRepository;
 import java.util.Date;
 
 @Data

@@ -25,39 +25,22 @@ public class IncomeController {
 
     private Income mapFromDtoToEntity(IncomeDto incomeDto){
         Optional<Product> optionalProduct = productRepository.findById( incomeDto.getId());
-        if(optionalProduct.isPresent()){
-            return new Income(
-                    incomeDto.getQuantity(),
-                    incomeDto.getSeller(),
-                    incomeDto.getDate(),
-                    incomeDto.getPrice(),
-                    optionalProduct.get()
-            );
-        } else {
-            return new Income(
-                    incomeDto.getQuantity(),
-                    incomeDto.getSeller(),
-                    incomeDto.getDate(),
-                    incomeDto.getPrice(),
-                    null
-            );
-        }
+        return new Income(
+                incomeDto.getQuantity(),
+                incomeDto.getSeller(),
+                incomeDto.getDate(),
+                incomeDto.getPrice(),
+                optionalProduct.get()
+        );
     }
 
     private Income modifyEntityWithDto(IncomeDto incomeDto, Income findedIncome){
         Optional<Product> optionalProduct = productRepository.findById( incomeDto.getId());
-        if(optionalProduct.isPresent()) {
             findedIncome.setQuantity(incomeDto.getQuantity());
             findedIncome.setDate(incomeDto.getDate());
             findedIncome.setPrice(incomeDto.getPrice());
             findedIncome.setSeller(incomeDto.getSeller());
             findedIncome.setProduct(optionalProduct.get());
-        } else {
-            findedIncome.setQuantity(incomeDto.getQuantity());
-            findedIncome.setDate(incomeDto.getDate());
-            findedIncome.setPrice(incomeDto.getPrice());
-            findedIncome.setSeller(incomeDto.getSeller());
-        }
         return findedIncome;
     }
 

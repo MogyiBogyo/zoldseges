@@ -2,6 +2,7 @@ package org.elte.zoldseges.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,9 +20,11 @@ public class User {
     private Integer id;
 
     @Column(nullable = false)
+    @JsonProperty(value = "familyname")
     private String familyname;
 
     @Column(nullable = false)
+    @JsonProperty(value = "givenname")
     private String givenname;
 
     @Column(unique = true)
@@ -35,10 +38,12 @@ public class User {
     private String password;
 
     @Column
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column
+    @JsonIgnore
     private boolean enable;
 
     @OneToMany(mappedBy = "user")
@@ -71,6 +76,18 @@ public class User {
         this.role = Role.ROLE_WORKER;
     }
 
+
+    public User(String familyname, String givenname, String username, String email, String password, Role role,  List<WorkTime> workTimeList) {
+        this.familyname = familyname;
+        this.givenname = givenname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.enable = true;
+        this.workTimeList = workTimeList;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -85,24 +102,4 @@ public class User {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return enable == user.enable &&
-                id.equals(user.id) &&
-                familyname.equals(user.familyname) &&
-                givenname.equals(user.givenname) &&
-                username.equals(user.username) &&
-                email.equals(user.email) &&
-                password.equals(user.password) &&
-                role == user.role &&
-                Objects.equals(workTimeList, user.workTimeList);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, familyname, givenname, username, email, password, role, enable, workTimeList);
-    }
 }

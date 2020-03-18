@@ -42,6 +42,7 @@ public class SaleController {
         }
     }
 
+    //TODO: optional to endpoint
     private Sale modifyEntityWithDto(SaleDto saleDto, Sale findedSale){
        Optional<Product> product =  productRepository.findById(saleDto.getProductId());
         if (product.isPresent()) {

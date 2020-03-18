@@ -34,7 +34,6 @@ public class Sale {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private Product product;
 
     public Sale(Integer quantity, Date date, String buyer, Integer price, Product product) {

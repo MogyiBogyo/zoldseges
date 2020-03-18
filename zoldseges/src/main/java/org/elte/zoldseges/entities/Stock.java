@@ -21,7 +21,6 @@ public class Stock {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private Product product;
 
     @Column(nullable = false)

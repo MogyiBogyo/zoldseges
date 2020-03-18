@@ -57,7 +57,7 @@ public class StockController {
     }
 
     /**
-     * @param id
+     * @param id id from request
      * @return stock data with this id
      */
     @GetMapping("/{id}")

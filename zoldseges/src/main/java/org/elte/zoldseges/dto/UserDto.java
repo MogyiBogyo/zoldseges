@@ -26,7 +26,7 @@ public class UserDto {
 
     private User.Role role;
 
-    private boolean enable;
+    private boolean enable = true;
 
     private List<WorkTime> workTimeList;
 
@@ -48,7 +48,5 @@ public class UserDto {
         this.password = password;
         this.role = User.Role.ROLE_WORKER;
         this.workTimeList = null;
-        this.enable = true;
-
     }
 }

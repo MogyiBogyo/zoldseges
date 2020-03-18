@@ -40,7 +40,7 @@ public class UserController {
        findedUser.setGivenname(userDto.getGivenname());
        findedUser.setUsername(userDto.getUsername());
        findedUser.setEmail(userDto.getEmail());
-       findedUser.setPassword(userDto.getPassword());
+       findedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
        findedUser.setRole(userDto.getRole());
        return findedUser;
     }
@@ -112,15 +112,26 @@ public class UserController {
     }
 
     private User mapFromDtoToEntity(UserDto userDto){
-        return new User(
-                userDto.getFamilyname(),
-                userDto.getGivenname(),
-                userDto.getUsername(),
-                userDto.getEmail(),
-                passwordEncoder.encode(userDto.getPassword()),
-                userDto.getRole(),
-                userDto.isEnable(),
-                userDto.getWorkTimeList());
+        if(userDto.getRole().equals(User.Role.ROLE_ADMIN)){
+            return new User(
+                    userDto.getFamilyname(),
+                    userDto.getGivenname(),
+                    userDto.getUsername(),
+                    userDto.getEmail(),
+                    passwordEncoder.encode(userDto.getPassword()),
+                    userDto.getRole(),
+                    userDto.getWorkTimeList());
+        } else {
+            return new User(
+                    userDto.getFamilyname(),
+                    userDto.getGivenname(),
+                    userDto.getUsername(),
+                    userDto.getEmail(),
+                    passwordEncoder.encode(userDto.getPassword()),
+                    userDto.getWorkTimeList());
+        }
+
+
     }
 
     @PostMapping("register")
