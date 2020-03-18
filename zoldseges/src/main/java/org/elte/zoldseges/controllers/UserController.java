@@ -113,26 +113,13 @@ public class UserController {
     }
 
     private User mapFromDtoToEntity(UserDto userDto) {
-        if (userDto.getRole().equals(User.Role.ROLE_ADMIN)) {
-            return new User(
-                    userDto.getFamilyname(),
-                    userDto.getGivenname(),
-                    userDto.getUsername(),
-                    userDto.getEmail(),
-                    passwordEncoder.encode(userDto.getPassword()),
-                    userDto.getRole(),
-                    userDto.getWorkTimeList());
-        } else {
-            return new User(
-                    userDto.getFamilyname(),
-                    userDto.getGivenname(),
-                    userDto.getUsername(),
-                    userDto.getEmail(),
-                    passwordEncoder.encode(userDto.getPassword()),
-                    userDto.getWorkTimeList());
-        }
-
-
+        return new User(
+                userDto.getFamilyname(),
+                userDto.getGivenname(),
+                userDto.getUsername(),
+                userDto.getEmail(),
+                passwordEncoder.encode(userDto.getPassword()),
+                userDto.getWorkTimeList());
     }
 
     @PostMapping("register")
@@ -158,6 +145,26 @@ public class UserController {
         Optional<User> oUser = userRepository.findById(id);
         if (oUser.isPresent()) {
             return ResponseEntity.ok(userRepository.save(modifyEntityWithDto(userDto, oUser.get())));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/makeAdmin")
+    public ResponseEntity<User> makeAdmin(@PathVariable Integer id, Authentication auth) {
+        Optional<User> loggedInUser = userRepository.findByEmail(auth.getName());
+        if (loggedInUser.isPresent()) {
+            if (loggedInUser.get().getRole().equals(User.Role.ROLE_ADMIN)) {
+                Optional<User> oUser = userRepository.findById(id);
+                if (oUser.isPresent()) {
+                    oUser.get().setRole(User.Role.ROLE_ADMIN);
+                    return ResponseEntity.ok(userRepository.save(oUser.get()));
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            }else {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

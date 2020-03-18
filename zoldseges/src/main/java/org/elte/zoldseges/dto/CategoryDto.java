@@ -24,5 +24,10 @@ public class CategoryDto {
         this.productList = productList;
     }
 
-
+    public CategoryDto(String name, Integer salePrice, boolean isSale) {
+        this.name = name;
+        this.salePrice = salePrice;
+        this.isSale = isSale;
+        this.productList = null;
+    }
 }

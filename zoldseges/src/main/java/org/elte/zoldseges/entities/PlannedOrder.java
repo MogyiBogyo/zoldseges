@@ -2,6 +2,7 @@ package org.elte.zoldseges.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class PlannedOrder {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+    @JsonIgnoreProperties({"salePrice", "isSale", })
     private Product product;
 
     public PlannedOrder(Integer quantity, Product product) {

@@ -73,6 +73,7 @@ public class WorkTimeController {
     /**
      * @param worktimeDto
      * @return adds a new worktime
+     * */
     @PostMapping("")
     public ResponseEntity<WorkTime> post(@RequestBody WorktimeDto worktimeDto) {
 
@@ -94,7 +95,7 @@ public class WorkTimeController {
     @PutMapping("/{id}")
     public ResponseEntity<WorkTime> put(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
         Optional<WorkTime> oWorkTime = workTimeRepository.findById(id);
-        if (oWorkTime.isPresent() && worktimeDto.getUserId().equals(id)) {
+        if (oWorkTime.isPresent()) {
             return ResponseEntity.ok(workTimeRepository.save(modifyEntityWithDto(worktimeDto, oWorkTime.get())));
         } else {
             return ResponseEntity.badRequest().build();

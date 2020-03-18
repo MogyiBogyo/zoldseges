@@ -1,5 +1,6 @@
 package org.elte.zoldseges.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,7 @@ public class Income {
     private Integer price;
 
     @ManyToOne
-    @JoinColumn
+    @JsonIgnoreProperties({"salePrice", "isSale", })
     private Product product;
 
     public Income(Integer quantity, String seller, Date date, Integer price, Product product) {

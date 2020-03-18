@@ -2,6 +2,7 @@ package org.elte.zoldseges.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,15 +21,19 @@ public class Product {
     private Integer id;
 
     @Column(nullable = false, unique = true)
+    @JsonProperty(value = "name")
     private String name;
 
     @Column(nullable = false)
+    @JsonProperty(value = "price")
     private Integer price;
 
     @Column(nullable = false)
+    @JsonProperty(value = "salePrice")
     private Integer salePrice;
 
     @Column(nullable = false)
+    @JsonProperty(value = "isSale")
     private boolean isSale;
 
     @ManyToOne

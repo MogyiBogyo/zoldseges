@@ -7,9 +7,9 @@ insert into work_time(date, end_hour, start_hour, user_id) values ('2020-03-06',
 insert into work_time(date, end_hour, start_hour, user_id) values ('2020-03-05', '08:00', '16:00', 2);
 
 
-insert into Category(category_name, sale_price, is_sale) values ('zöldség', 300, false);
-insert into Category(category_name, sale_price, is_sale) values ('gyümölcs', 370, true);
-insert into Category(category_name, sale_price, is_sale) values ('magvak', 100, false);
+insert into Category(name, sale_price, is_sale) values ('zöldség', 300, false);
+insert into Category(name, sale_price, is_sale) values ('gyümölcs', 370, true);
+insert into Category(name, sale_price, is_sale) values ('magvak', 100, false);
 
 insert into Product(name, price, sale_price, category_id, is_sale ) values ('banán', 470, 390, 2, false);
 insert into Product(name, price, sale_price, category_id, is_sale ) values ('alma', 300, 250, 2, true);
@@ -24,7 +24,6 @@ INSERT INTO stock(product_id, quantity) values (1, 40);
 INSERT INTO income(date, price, quantity, seller, product_id) VALUES ('2020-03-02', 300, 10, 'Éhes kft', 2);
 INSERT INTO income(date, price, quantity, seller, product_id) VALUES ('2020-03-03', 222, 6, 'Uborkás kft', 4);
 INSERT INTO income(date, price, quantity, seller, product_id) VALUES ('2020-03-04', 250, 10, 'Éhes kft', 2);
-
 
 INSERT INTO planned_order(quantity, product_id) VALUES (19, 1);
 INSERT INTO planned_order(quantity, product_id) VALUES (1, 2);

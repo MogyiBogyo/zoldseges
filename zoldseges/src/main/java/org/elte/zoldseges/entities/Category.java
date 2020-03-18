@@ -17,9 +17,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(nullable = false, unique = true)
-    private String categoryName;
+    private String name;
 
     @Column(nullable = false)
     private Integer salePrice;
@@ -31,27 +30,16 @@ public class Category {
     private List<Product> productList;
 
 
-    public Category(String categoryName, Integer salePrice, boolean isSale, List<Product> productList) {
-        this.categoryName = categoryName;
+    public Category(String name, Integer salePrice, boolean isSale, List<Product> productList) {
+        this.name = name;
         this.salePrice = salePrice;
         this.isSale = isSale;
         this.productList = productList;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Category)) return false;
-        Category category = (Category) o;
-        return isSale() == category.isSale() &&
-                Objects.equals(getId(), category.getId()) &&
-                Objects.equals(getCategoryName(), category.getCategoryName()) &&
-                Objects.equals(getSalePrice(), category.getSalePrice()) &&
-                Objects.equals(getProductList(), category.getProductList());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getCategoryName(), getSalePrice(), isSale(), getProductList());
+    public Category(String name, Integer salePrice, boolean isSale) {
+        this.name = name;
+        this.salePrice = salePrice;
+        this.isSale = isSale;
     }
 }

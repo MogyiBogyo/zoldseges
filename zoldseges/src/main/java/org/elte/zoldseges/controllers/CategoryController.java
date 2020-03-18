@@ -66,17 +66,20 @@ public class CategoryController {
      */
     @PostMapping("")
     public ResponseEntity<Category> post(@RequestBody CategoryDto categoryDto) {
-
-        Category savedCategory = categoryRepository.save(mapFromCategoryDtoToCategoryEntity(categoryDto));
-        return ResponseEntity.ok(savedCategory);
+        Optional<Category> optionalCategory = categoryRepository.findByName(categoryDto.getName());
+        if(optionalCategory.isPresent()){
+            return ResponseEntity.badRequest().build();
+        }else{
+            Category savedCategory = categoryRepository.save(mapFromCategoryDtoToCategoryEntity(categoryDto));
+            return ResponseEntity.ok(savedCategory);
+        }
     }
 
-    private Category mapFromCategoryDtoToCategoryEntity(CategoryDto category) {
+    private Category mapFromCategoryDtoToCategoryEntity(CategoryDto categorydto) {
         return new Category(
-                category.getName(),
-                category.getSalePrice(),
-                category.isSale(),
-                category.getProductList()
+                categorydto.getName(),
+                categorydto.getSalePrice(),
+                categorydto.isSale()
         );
     }
 
@@ -96,7 +99,7 @@ public class CategoryController {
     }
 
     private Category modifyEntityWithDto(CategoryDto categoryDto, Category findedCategory) {
-        findedCategory.setCategoryName(categoryDto.getName());
+        findedCategory.setName(categoryDto.getName());
         findedCategory.setSalePrice(categoryDto.getSalePrice());
         findedCategory.setSale(categoryDto.isSale());
         findedCategory.setProductList(categoryDto.getProductList());
@@ -105,16 +108,16 @@ public class CategoryController {
 
     /**
      * @param id
-     * @return delete a category whit this id, if it exists
+     * @return delete a category with this id, if it exists and does not contains any product
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
-        if (optionalCategory.isPresent()) {
+        if (optionalCategory.isPresent() && optionalCategory.get().getProductList().isEmpty()) {
             categoryRepository.deleteById(id);
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 }
