@@ -3,7 +3,10 @@ package org.elte.zoldseges.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.elte.zoldseges.entities.*;
+import org.elte.zoldseges.entities.Income;
+import org.elte.zoldseges.entities.PlannedOrder;
+import org.elte.zoldseges.entities.Sale;
+import org.elte.zoldseges.entities.Stock;
 
 import java.util.List;
 

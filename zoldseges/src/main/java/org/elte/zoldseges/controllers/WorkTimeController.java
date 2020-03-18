@@ -1,8 +1,6 @@
 package org.elte.zoldseges.controllers;
 
-import org.elte.zoldseges.dto.StockDto;
 import org.elte.zoldseges.dto.WorktimeDto;
-import org.elte.zoldseges.entities.Stock;
 import org.elte.zoldseges.entities.User;
 import org.elte.zoldseges.entities.WorkTime;
 import org.elte.zoldseges.repositories.UserRepository;
@@ -23,7 +21,7 @@ public class WorkTimeController {
     @Autowired
     private UserRepository userRepository;
 
-    private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto){
+    private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto) {
         Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
         return new WorkTime(
                 worktimeDto.getDate(),
@@ -32,15 +30,14 @@ public class WorkTimeController {
                 optionalUser.get());
     }
 
-    private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime findedWorkTime){
+    private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime findedWorkTime) {
         Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             findedWorkTime.setDate(worktimeDto.getDate());
             findedWorkTime.setStartHour(worktimeDto.getStartHour());
             findedWorkTime.setEndHour(worktimeDto.getEndHour());
             findedWorkTime.setUser(optionalUser.get());
-        }
-         else{
+        } else {
             findedWorkTime.setDate(worktimeDto.getDate());
             findedWorkTime.setStartHour(worktimeDto.getStartHour());
             findedWorkTime.setEndHour(worktimeDto.getEndHour());
@@ -75,15 +72,12 @@ public class WorkTimeController {
 
     /**
      * @param worktimeDto
-     *
      * @return adds a new worktime
-     * TODO: valid user id check
-     */
     @PostMapping("")
     public ResponseEntity<WorkTime> post(@RequestBody WorktimeDto worktimeDto) {
 
         Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             WorkTime savedWorkTime = workTimeRepository.save(mapFromDtoToEntity(worktimeDto));
             return ResponseEntity.ok(savedWorkTime);
         } else {
@@ -101,7 +95,7 @@ public class WorkTimeController {
     public ResponseEntity<WorkTime> put(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
         Optional<WorkTime> oWorkTime = workTimeRepository.findById(id);
         if (oWorkTime.isPresent() && worktimeDto.getUserId().equals(id)) {
-            return ResponseEntity.ok(workTimeRepository.save(modifyEntityWithDto(worktimeDto,oWorkTime.get())));
+            return ResponseEntity.ok(workTimeRepository.save(modifyEntityWithDto(worktimeDto, oWorkTime.get())));
         } else {
             return ResponseEntity.badRequest().build();
         }
@@ -113,7 +107,7 @@ public class WorkTimeController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
-        Optional<WorkTime> optionalWorkTime= workTimeRepository.findById(id);
+        Optional<WorkTime> optionalWorkTime = workTimeRepository.findById(id);
         if (optionalWorkTime.isPresent()) {
             workTimeRepository.deleteById(id);
             return ResponseEntity.ok().build();

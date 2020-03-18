@@ -1,6 +1,5 @@
 package org.elte.zoldseges.controllers;
 
-import org.elte.zoldseges.dto.ProductDto;
 import org.elte.zoldseges.dto.SaleDto;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.entities.Sale;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,9 +21,9 @@ public class SaleController {
     private ProductRepository productRepository;
 
 
-    private Sale mapFromDtoToEntity(SaleDto saleDto){
-        Optional<Product> product =  productRepository.findById(saleDto.getProductId());
-        if (product.isPresent()){
+    private Sale mapFromDtoToEntity(SaleDto saleDto) {
+        Optional<Product> product = productRepository.findById(saleDto.getProductId());
+        if (product.isPresent()) {
             return new Sale(
                     saleDto.getQuantity(),
                     saleDto.getDate(),
@@ -43,8 +41,8 @@ public class SaleController {
     }
 
     //TODO: optional to endpoint
-    private Sale modifyEntityWithDto(SaleDto saleDto, Sale findedSale){
-       Optional<Product> product =  productRepository.findById(saleDto.getProductId());
+    private Sale modifyEntityWithDto(SaleDto saleDto, Sale findedSale) {
+        Optional<Product> product = productRepository.findById(saleDto.getProductId());
         if (product.isPresent()) {
             findedSale.setBuyer(saleDto.getBuyer());
             findedSale.setDate(saleDto.getDate());
@@ -92,6 +90,7 @@ public class SaleController {
             return ResponseEntity.notFound().build();
         }
     }
+
     /**
      * @param saledto
      * @return add a new sale
@@ -105,7 +104,7 @@ public class SaleController {
     /**
      * @param saledto
      * @param id
-     * @return  modify a sale if it exists
+     * @return modify a sale if it exists
      */
     @PutMapping("/{id}")
     public ResponseEntity<Sale> put(@RequestBody SaleDto saledto, @PathVariable Integer id) {
@@ -132,9 +131,6 @@ public class SaleController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
 
 
 }

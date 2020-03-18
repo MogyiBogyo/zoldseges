@@ -3,13 +3,14 @@ package org.elte.zoldseges.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorktimeDto {
-    public Integer id;
+    private Integer id;
     private Date date;
     private String startHour;
     private String endHour;

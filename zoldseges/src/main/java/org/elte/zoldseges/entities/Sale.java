@@ -1,15 +1,12 @@
 package org.elte.zoldseges.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Data

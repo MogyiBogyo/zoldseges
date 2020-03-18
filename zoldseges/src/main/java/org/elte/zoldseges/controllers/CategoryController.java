@@ -2,7 +2,6 @@ package org.elte.zoldseges.controllers;
 
 import org.elte.zoldseges.dto.CategoryDto;
 import org.elte.zoldseges.entities.Category;
-import org.elte.zoldseges.entities.Income;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.CategoryRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -74,8 +71,8 @@ public class CategoryController {
         return ResponseEntity.ok(savedCategory);
     }
 
-    private Category mapFromCategoryDtoToCategoryEntity(CategoryDto category){
-        return  new Category(
+    private Category mapFromCategoryDtoToCategoryEntity(CategoryDto category) {
+        return new Category(
                 category.getName(),
                 category.getSalePrice(),
                 category.isSale(),
@@ -98,11 +95,11 @@ public class CategoryController {
         }
     }
 
-    private Category modifyEntityWithDto(CategoryDto categoryDto, Category findedCategory){
-          findedCategory.setCategoryName(categoryDto.getName());
-          findedCategory.setSalePrice(categoryDto.getSalePrice());
-          findedCategory.setSale(categoryDto.isSale());
-          findedCategory.setProductList(categoryDto.getProductList());
+    private Category modifyEntityWithDto(CategoryDto categoryDto, Category findedCategory) {
+        findedCategory.setCategoryName(categoryDto.getName());
+        findedCategory.setSalePrice(categoryDto.getSalePrice());
+        findedCategory.setSale(categoryDto.isSale());
+        findedCategory.setProductList(categoryDto.getProductList());
         return findedCategory;
     }
 

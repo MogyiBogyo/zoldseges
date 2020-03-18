@@ -1,9 +1,7 @@
 package org.elte.zoldseges.controllers;
 
-import org.elte.zoldseges.dto.SaleDto;
 import org.elte.zoldseges.dto.StockDto;
 import org.elte.zoldseges.entities.Product;
-import org.elte.zoldseges.entities.Sale;
 import org.elte.zoldseges.entities.Stock;
 import org.elte.zoldseges.repositories.ProductRepository;
 import org.elte.zoldseges.repositories.StockRepository;
@@ -22,9 +20,9 @@ public class StockController {
     @Autowired
     private ProductRepository productRepository;
 
-    private Stock mapFromDtoToEntity(StockDto stockDto){
+    private Stock mapFromDtoToEntity(StockDto stockDto) {
         Optional<Product> optionalProduct = productRepository.findById(stockDto.getProductId());
-        if(optionalProduct.isPresent()){
+        if (optionalProduct.isPresent()) {
             return new Stock(
                     optionalProduct.get(),
                     stockDto.getQuantity());
@@ -36,9 +34,9 @@ public class StockController {
 
     }
 
-    private Stock modifyEntityWithDto(StockDto stockDto, Stock findedStock){
+    private Stock modifyEntityWithDto(StockDto stockDto, Stock findedStock) {
         Optional<Product> optionalProduct = productRepository.findById(stockDto.getProductId());
-        if(optionalProduct.isPresent()) {
+        if (optionalProduct.isPresent()) {
             findedStock.setProduct(optionalProduct.get());
             findedStock.setQuantity(stockDto.getQuantity());
         } else {

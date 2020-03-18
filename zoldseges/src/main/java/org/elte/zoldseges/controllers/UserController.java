@@ -35,14 +35,14 @@ public class UserController {
     @Autowired
     private WorkTimeRepository workTimeRepository;
 
-    private User modifyEntityWithDto(UserDto userDto, User findedUser){
-       findedUser.setFamilyname(userDto.getFamilyname());
-       findedUser.setGivenname(userDto.getGivenname());
-       findedUser.setUsername(userDto.getUsername());
-       findedUser.setEmail(userDto.getEmail());
-       findedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-       findedUser.setRole(userDto.getRole());
-       return findedUser;
+    private User modifyEntityWithDto(UserDto userDto, User findedUser) {
+        findedUser.setFamilyname(userDto.getFamilyname());
+        findedUser.setGivenname(userDto.getGivenname());
+        findedUser.setUsername(userDto.getUsername());
+        findedUser.setEmail(userDto.getEmail());
+        findedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        findedUser.setRole(userDto.getRole());
+        return findedUser;
     }
 
 
@@ -62,18 +62,19 @@ public class UserController {
     @GetMapping("/disabled")
     public ResponseEntity<Iterable<User>> getAllDisabled(Authentication auth) {
         Optional<User> loggedInUser = userRepository.findByEmail(auth.getName());
-        if(loggedInUser.isPresent()) {
+        if (loggedInUser.isPresent()) {
             if (loggedInUser.get().getRole().equals(User.Role.ROLE_ADMIN)) {
                 return ResponseEntity.ok(userRepository.findByEnable(false));
             } else {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-        }else {
+        } else {
             return ResponseEntity.notFound().build();
         }
 
 
     }
+
     /**
      * @param id
      * @return return user with this id, if it exists
@@ -111,8 +112,8 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
-    private User mapFromDtoToEntity(UserDto userDto){
-        if(userDto.getRole().equals(User.Role.ROLE_ADMIN)){
+    private User mapFromDtoToEntity(UserDto userDto) {
+        if (userDto.getRole().equals(User.Role.ROLE_ADMIN)) {
             return new User(
                     userDto.getFamilyname(),
                     userDto.getGivenname(),
@@ -146,7 +147,6 @@ public class UserController {
     }
 
 
-
     @PostMapping("login")
     public ResponseEntity login() {
         return ResponseEntity.ok(authenticatedUser.getUser());
@@ -162,7 +162,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 
     @DeleteMapping("/{id}")

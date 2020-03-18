@@ -3,11 +3,12 @@ package org.elte.zoldseges.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 @Table(name = "users")
 @Entity
@@ -65,7 +66,7 @@ public class User {
         this.workTimeList = workTimeList;
     }
 
-    public User(String familyname, String givenname, String username, String email, String password,  List<WorkTime> workTimeList) {
+    public User(String familyname, String givenname, String username, String email, String password, List<WorkTime> workTimeList) {
         this.familyname = familyname;
         this.givenname = givenname;
         this.username = username;
@@ -77,7 +78,7 @@ public class User {
     }
 
 
-    public User(String familyname, String givenname, String username, String email, String password, Role role,  List<WorkTime> workTimeList) {
+    public User(String familyname, String givenname, String username, String email, String password, Role role, List<WorkTime> workTimeList) {
         this.familyname = familyname;
         this.givenname = givenname;
         this.username = username;

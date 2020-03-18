@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.PrinterURI;
 import java.util.Optional;
 
 
@@ -24,14 +23,14 @@ public class PlannedOrderController {
     private ProductRepository productRepository;
 
 
-    private PlannedOrder mapFromDtoToEntity(PlannedOrderDto plannedOrderDto){
+    private PlannedOrder mapFromDtoToEntity(PlannedOrderDto plannedOrderDto) {
         Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
-        if(optionalProduct.isPresent()) {
+        if (optionalProduct.isPresent()) {
             return new PlannedOrder(
                     plannedOrderDto.getQuantity(),
                     optionalProduct.get()
             );
-        }else {
+        } else {
             return new PlannedOrder(
                     plannedOrderDto.getQuantity(),
                     null
@@ -39,12 +38,12 @@ public class PlannedOrderController {
         }
     }
 
-    private PlannedOrder modifyEntityWithDto(PlannedOrderDto plannedOrderDto, PlannedOrder findedPOrder){
+    private PlannedOrder modifyEntityWithDto(PlannedOrderDto plannedOrderDto, PlannedOrder findedPOrder) {
         Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
-        if(optionalProduct.isPresent()) {
+        if (optionalProduct.isPresent()) {
             findedPOrder.setQuantity(plannedOrderDto.getQuantity());
             findedPOrder.setProduct(optionalProduct.get());
-        }else {
+        } else {
             findedPOrder.setQuantity(plannedOrderDto.getQuantity());
         }
         return findedPOrder;
@@ -102,7 +101,7 @@ public class PlannedOrderController {
     public ResponseEntity<PlannedOrder> put(@RequestBody PlannedOrderDto plannedOrderDto, @PathVariable Integer id) {
         Optional<PlannedOrder> optionalPlannedOrder = plannedOrderRepository.findById(id);
         if (optionalPlannedOrder.isPresent()) {
-            return ResponseEntity.ok(plannedOrderRepository.save(modifyEntityWithDto(plannedOrderDto,optionalPlannedOrder.get())));
+            return ResponseEntity.ok(plannedOrderRepository.save(modifyEntityWithDto(plannedOrderDto, optionalPlannedOrder.get())));
         } else {
             return ResponseEntity.notFound().build();
         }

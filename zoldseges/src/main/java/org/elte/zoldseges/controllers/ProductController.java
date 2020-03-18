@@ -1,9 +1,7 @@
 package org.elte.zoldseges.controllers;
 
-import org.elte.zoldseges.dto.IncomeDto;
 import org.elte.zoldseges.dto.ProductDto;
 import org.elte.zoldseges.entities.Category;
-import org.elte.zoldseges.entities.Income;
 import org.elte.zoldseges.entities.Product;
 import org.elte.zoldseges.repositories.CategoryRepository;
 import org.elte.zoldseges.repositories.ProductRepository;
@@ -24,7 +22,7 @@ public class ProductController {
     private CategoryRepository categoryRepository;
 
 
-    private Product mapFromDtoToEntity(ProductDto productDto){
+    private Product mapFromDtoToEntity(ProductDto productDto) {
         Optional<Category> productCategory = categoryRepository.findById(productDto.getCategoryId());
         return new Product(
                 productDto.getName(),
@@ -40,7 +38,7 @@ public class ProductController {
         );
     }
 
-    private Product modifyEntityWithDto(ProductDto productDto, Product findedProduct){
+    private Product modifyEntityWithDto(ProductDto productDto, Product findedProduct) {
         Optional<Category> productCategory = categoryRepository.findById(productDto.getCategoryId());
         findedProduct.setName(productDto.getName());
         findedProduct.setPrice((productDto.getPrice()));
@@ -76,6 +74,7 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/{id}/category")
     public ResponseEntity<Category> getProductCategory(@PathVariable Integer id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
@@ -104,7 +103,7 @@ public class ProductController {
     public ResponseEntity<Product> put(@RequestBody ProductDto productDto, @PathVariable Integer id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            return ResponseEntity.ok(productRepository.save(modifyEntityWithDto(productDto,optionalProduct.get())));
+            return ResponseEntity.ok(productRepository.save(modifyEntityWithDto(productDto, optionalProduct.get())));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -116,8 +115,8 @@ public class ProductController {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
-            if(product.getIncomeList().isEmpty() && product.getPlannedOrderList().isEmpty()
-                &&product.getSaleList().isEmpty() && product.getStockList().isEmpty()) {
+            if (product.getIncomeList().isEmpty() && product.getPlannedOrderList().isEmpty()
+                    && product.getSaleList().isEmpty() && product.getStockList().isEmpty()) {
                 productRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             } else {

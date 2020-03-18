@@ -40,12 +40,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
     }
+
     @Autowired
     protected void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
+
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         /*auth
@@ -59,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationEntryPoint getBasicAuthEntryPoint(){
+    public AuthenticationEntryPoint getBasicAuthEntryPoint() {
         return new CustomBasicAuthenticationEntryPoint();
     }
 
