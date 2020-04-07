@@ -31,7 +31,7 @@ public class WorkTime {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnoreProperties({"givenname", "familyname"})
+    //@JsonIgnoreProperties({"givenname", "familyname"})
     private User user;
 
     public WorkTime(Date date, String startHour, String endHour, User user) {

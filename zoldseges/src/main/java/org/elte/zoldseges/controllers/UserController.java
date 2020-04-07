@@ -1,8 +1,6 @@
 package org.elte.zoldseges.controllers;
 
-import org.elte.zoldseges.dto.StockDto;
 import org.elte.zoldseges.dto.UserDto;
-import org.elte.zoldseges.entities.Stock;
 import org.elte.zoldseges.entities.User;
 import org.elte.zoldseges.entities.WorkTime;
 import org.elte.zoldseges.repositories.UserRepository;

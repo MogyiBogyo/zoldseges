@@ -39,7 +39,7 @@ public class User {
     private String password;
 
     @Column
-    @JsonIgnore
+    //@JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
 

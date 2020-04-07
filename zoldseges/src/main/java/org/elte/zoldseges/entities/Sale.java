@@ -32,7 +32,7 @@ public class Sale {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnoreProperties({"salePrice", "isSale", })
+    @JsonIgnoreProperties({"salePrice", "isSale", "category"})
     private Product product;
 
     public Sale(Integer quantity, Date date, String buyer, Integer price, Product product) {

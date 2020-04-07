@@ -19,7 +19,7 @@ public class Stock {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnoreProperties({"salePrice", "isSale", })
+    @JsonIgnoreProperties({"salePrice", "isSale", "category" })
     private Product product;
 
     @Column(nullable = false)

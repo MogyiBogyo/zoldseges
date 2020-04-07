@@ -1,5 +1,6 @@
 package org.elte.zoldseges.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Category {
     @Column(nullable = false)
     private boolean isSale;
 
+    @JsonProperty(value= "productList")
     @OneToMany(mappedBy = "category")
     private List<Product> productList;
 

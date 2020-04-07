@@ -2,6 +2,7 @@ package org.elte.zoldseges.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,7 +39,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+    @JsonIgnoreProperties({"productList"})
     private Category category;
 
     @OneToMany(mappedBy = "product")
