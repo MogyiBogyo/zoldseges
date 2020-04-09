@@ -16,7 +16,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.lang.reflect.Array;
+
+
 import java.util.Arrays;
 
 
@@ -34,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/h2/**", "/users/register").permitAll()   // important!
+                .antMatchers("/h2/**", "/users/login").permitAll()   // important!
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -56,9 +57,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        /*auth
-                .inMemoryAuthentication()
-                .withUser("Pistike").password("$2a$04$YDiv9c./ytEGZQopFfExoOgGlJL6/o0er0K.hiGb5TGKHUL8Ebn..").roles("ADMIN");*/
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+
     }
 
     @Bean
