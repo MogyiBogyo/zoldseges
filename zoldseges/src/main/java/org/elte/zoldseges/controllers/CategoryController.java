@@ -98,12 +98,17 @@ public class CategoryController {
         }
     }
 
-    private Category modifyEntityWithDto(CategoryDto categoryDto, Category findedCategory) {
-        findedCategory.setName(categoryDto.getName());
-        findedCategory.setSalePrice(categoryDto.getSalePrice());
-        findedCategory.setSale(categoryDto.isSale());
-        findedCategory.setProductList(categoryDto.getProductList());
-        return findedCategory;
+    private Category modifyEntityWithDto(CategoryDto categoryDto, Category foundedCategory) {
+        foundedCategory.setName(categoryDto.getName());
+        if(categoryDto.getSalePrice() == null){
+           foundedCategory.setSalePrice(0);
+        }else {
+            foundedCategory.setSalePrice(categoryDto.getSalePrice());
+        }
+
+        foundedCategory.setSale(categoryDto.isSale());
+        foundedCategory.setProductList(categoryDto.getProductList());
+        return foundedCategory;
     }
 
     /**

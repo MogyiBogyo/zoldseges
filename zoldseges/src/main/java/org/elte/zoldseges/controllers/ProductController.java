@@ -91,8 +91,13 @@ public class ProductController {
      */
     @PostMapping("")
     public ResponseEntity<Product> post(@RequestBody ProductDto productDto) {
-        Product savedProduct = productRepository.save(mapFromDtoToEntity(productDto));
-        return ResponseEntity.ok(savedProduct);
+        Optional<Product> optionalProduct = productRepository.findByName(productDto.getName());
+        if(optionalProduct.isPresent()){
+            return ResponseEntity.badRequest().build();
+        }else {
+            Product savedProduct = productRepository.save(mapFromDtoToEntity(productDto));
+            return ResponseEntity.ok(savedProduct);
+        }
     }
 
     /**

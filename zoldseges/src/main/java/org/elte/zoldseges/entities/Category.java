@@ -1,5 +1,7 @@
 package org.elte.zoldseges.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,13 +23,14 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column()
     private Integer salePrice;
 
     @Column(nullable = false)
     private boolean isSale;
 
     @JsonProperty(value= "productList")
+    @JsonIgnoreProperties(value= "{category}")
     @OneToMany(mappedBy = "category")
     private List<Product> productList;
 
@@ -43,5 +46,11 @@ public class Category {
         this.name = name;
         this.salePrice = salePrice;
         this.isSale = isSale;
+    }
+
+    public Category(String name, boolean isSale) {
+        this.name = name;
+        this.isSale = isSale;
+        this.salePrice = 0;
     }
 }

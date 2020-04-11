@@ -26,7 +26,19 @@ public class CategoryDto {
 
     public CategoryDto(String name, Integer salePrice, boolean isSale) {
         this.name = name;
-        this.salePrice = salePrice;
+        if(salePrice != null ){
+            this.salePrice = salePrice;
+        }else {
+            this.salePrice = 0;
+        }
+
+        this.isSale = isSale;
+        this.productList = null;
+    }
+
+    public CategoryDto(String name, boolean isSale) {
+        this.name = name;
+        this.salePrice = 0;
         this.isSale = isSale;
         this.productList = null;
     }

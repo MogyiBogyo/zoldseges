@@ -12,7 +12,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<Product> findById(Integer integer);
 
-    Product findByName(String name);
+    Optional<Product> findByName(String name);
 
     List<Product> findByPrice(Integer price);
 
