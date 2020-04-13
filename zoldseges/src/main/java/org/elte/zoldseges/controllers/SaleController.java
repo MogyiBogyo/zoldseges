@@ -22,41 +22,23 @@ public class SaleController {
 
 
     private Sale mapFromDtoToEntity(SaleDto saleDto) {
-        Optional<Product> product = productRepository.findById(saleDto.getProductId());
-        if (product.isPresent()) {
-            return new Sale(
-                    saleDto.getQuantity(),
-                    saleDto.getDate(),
-                    saleDto.getBuyer(),
-                    saleDto.getPrice(),
-                    product.get());
-        } else {
-            return new Sale(
-                    saleDto.getQuantity(),
-                    saleDto.getDate(),
-                    saleDto.getBuyer(),
-                    saleDto.getPrice(),
-                    null);
-        }
+        return new Sale(
+                saleDto.getQuantity(),
+                saleDto.getDate(),
+                saleDto.getBuyer(),
+                saleDto.getPrice(),
+                productRepository.findById(saleDto.getProductId()).get());
+
     }
 
-    //TODO: optional to endpoint
-    private Sale modifyEntityWithDto(SaleDto saleDto, Sale findedSale) {
-        Optional<Product> product = productRepository.findById(saleDto.getProductId());
-        if (product.isPresent()) {
-            findedSale.setBuyer(saleDto.getBuyer());
-            findedSale.setDate(saleDto.getDate());
-            findedSale.setPrice(saleDto.getPrice());
-            findedSale.setQuantity(saleDto.getQuantity());
-            findedSale.setProduct(product.get());
-        } else {
-            findedSale.setBuyer(saleDto.getBuyer());
-            findedSale.setDate(saleDto.getDate());
-            findedSale.setPrice(saleDto.getPrice());
-            findedSale.setQuantity(saleDto.getQuantity());
-            findedSale.setProduct(null);
-        }
-        return findedSale;
+    private Sale modifyEntityWithDto(SaleDto saleDto, Sale foundedSale) {
+        foundedSale.setBuyer(saleDto.getBuyer());
+        foundedSale.setDate(saleDto.getDate());
+        foundedSale.setPrice(saleDto.getPrice());
+        foundedSale.setQuantity(saleDto.getQuantity());
+        foundedSale.setProduct(productRepository.findById(saleDto.getProductId()).get());
+
+        return foundedSale;
     }
 
     /**
@@ -97,8 +79,14 @@ public class SaleController {
      */
     @PostMapping("")
     public ResponseEntity<Sale> post(@RequestBody SaleDto saledto) {
-        Sale savedSale = saleRepository.save(mapFromDtoToEntity(saledto));
-        return ResponseEntity.ok(savedSale);
+        Optional<Product> optionalProduct = productRepository.findById(saledto.getProductId());
+        if(optionalProduct.isPresent()){
+            Sale savedSale = saleRepository.save(mapFromDtoToEntity(saledto));
+            return ResponseEntity.ok(savedSale);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     /**
@@ -109,8 +97,8 @@ public class SaleController {
     @PutMapping("/{id}")
     public ResponseEntity<Sale> put(@RequestBody SaleDto saledto, @PathVariable Integer id) {
         Optional<Sale> optionalSale = saleRepository.findById(id);
-        if (optionalSale.isPresent()) {
-            //sale.setId(id);
+        Optional<Product> optionalProduct = productRepository.findById(saledto.getProductId());
+        if (optionalSale.isPresent() && optionalProduct.isPresent()) {
             return ResponseEntity.ok(saleRepository.save(modifyEntityWithDto(saledto, optionalSale.get())));
         } else {
             return ResponseEntity.notFound().build();

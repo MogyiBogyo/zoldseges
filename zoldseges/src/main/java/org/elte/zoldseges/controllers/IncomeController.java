@@ -24,24 +24,23 @@ public class IncomeController {
 
 
     private Income mapFromDtoToEntity(IncomeDto incomeDto) {
-        Optional<Product> optionalProduct = productRepository.findById(incomeDto.getId());
-        return new Income(
-                incomeDto.getQuantity(),
-                incomeDto.getSeller(),
-                incomeDto.getDate(),
-                incomeDto.getPrice(),
-                optionalProduct.get()
-        );
+            return new Income(
+                    incomeDto.getQuantity(),
+                    incomeDto.getSeller(),
+                    incomeDto.getDate(),
+                    incomeDto.getPrice(),
+                   productRepository.findById(incomeDto.getProductId()).get()
+            );
+
     }
 
-    private Income modifyEntityWithDto(IncomeDto incomeDto, Income findedIncome) {
-        Optional<Product> optionalProduct = productRepository.findById(incomeDto.getId());
-        findedIncome.setQuantity(incomeDto.getQuantity());
-        findedIncome.setDate(incomeDto.getDate());
-        findedIncome.setPrice(incomeDto.getPrice());
-        findedIncome.setSeller(incomeDto.getSeller());
-        findedIncome.setProduct(optionalProduct.get());
-        return findedIncome;
+    private Income modifyEntityWithDto(IncomeDto incomeDto, Income founded) {
+        founded.setQuantity(incomeDto.getQuantity());
+        founded.setDate(incomeDto.getDate());
+        founded.setPrice(incomeDto.getPrice());
+        founded.setSeller(incomeDto.getSeller());
+        founded.setProduct(productRepository.findById(incomeDto.getProductId()).get());
+        return founded;
     }
 
 
@@ -74,8 +73,14 @@ public class IncomeController {
      */
     @PostMapping("")
     public ResponseEntity<Income> post(@RequestBody IncomeDto incomeDto) {
-        Income savedIncome = incomeRepository.save(mapFromDtoToEntity(incomeDto));
-        return ResponseEntity.ok(savedIncome);
+        Optional<Product> optionalProduct = productRepository.findById(incomeDto.getProductId());
+        if(optionalProduct.isPresent()){
+            Income savedIncome = incomeRepository.save(mapFromDtoToEntity(incomeDto));
+            return ResponseEntity.ok(savedIncome);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     /**

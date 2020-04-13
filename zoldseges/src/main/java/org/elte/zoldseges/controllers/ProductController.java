@@ -93,7 +93,7 @@ public class ProductController {
     public ResponseEntity<Product> post(@RequestBody ProductDto productDto) {
         Optional<Product> optionalProduct = productRepository.findByName(productDto.getName());
         if(optionalProduct.isPresent()){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }else {
             Product savedProduct = productRepository.save(mapFromDtoToEntity(productDto));
             return ResponseEntity.ok(savedProduct);

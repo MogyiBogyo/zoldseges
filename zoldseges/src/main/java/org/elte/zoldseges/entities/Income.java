@@ -21,7 +21,7 @@ public class Income {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false)
+    @Column
     private String seller;
 
     @Column(nullable = false)
@@ -42,21 +42,6 @@ public class Income {
         this.product = product;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Income)) return false;
-        Income income = (Income) o;
-        return Objects.equals(getId(), income.getId()) &&
-                Objects.equals(getQuantity(), income.getQuantity()) &&
-                Objects.equals(getSeller(), income.getSeller()) &&
-                Objects.equals(getDate(), income.getDate()) &&
-                Objects.equals(getPrice(), income.getPrice()) &&
-                Objects.equals(getProduct(), income.getProduct());
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getQuantity(), getSeller(), getDate(), getPrice(), getProduct());
-    }
+
 }

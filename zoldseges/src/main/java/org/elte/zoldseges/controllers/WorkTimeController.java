@@ -22,30 +22,21 @@ public class WorkTimeController {
     private UserRepository userRepository;
 
     private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto) {
-        Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
+
         return new WorkTime(
                 worktimeDto.getDate(),
                 worktimeDto.getStartHour(),
                 worktimeDto.getEndHour(),
-                optionalUser.get());
+                userRepository.findById(worktimeDto.getUserId()).get());
     }
 
-    private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime findedWorkTime) {
-        Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
-        if (optionalUser.isPresent()) {
-            findedWorkTime.setDate(worktimeDto.getDate());
-            findedWorkTime.setStartHour(worktimeDto.getStartHour());
-            findedWorkTime.setEndHour(worktimeDto.getEndHour());
-            findedWorkTime.setUser(optionalUser.get());
-        } else {
-            findedWorkTime.setDate(worktimeDto.getDate());
-            findedWorkTime.setStartHour(worktimeDto.getStartHour());
-            findedWorkTime.setEndHour(worktimeDto.getEndHour());
+    private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime foundedWorktime) {
+        foundedWorktime.setDate(worktimeDto.getDate());
+        foundedWorktime.setStartHour(worktimeDto.getStartHour());
+        foundedWorktime.setEndHour(worktimeDto.getEndHour());
+        foundedWorktime.setUser(userRepository.findById(worktimeDto.getUserId()).get());
 
-        }
-
-
-        return findedWorkTime;
+        return foundedWorktime;
     }
 
     /**
@@ -70,13 +61,28 @@ public class WorkTimeController {
         }
     }
 
+
+    /**
+     * @param id
+     * @return return the user of the worktime, if it exists
+     */
+
+    @GetMapping("/{id}/user")
+    public ResponseEntity<User> getUser(@PathVariable Integer id) {
+        Optional<WorkTime> workTime = workTimeRepository.findById(id);
+        if (workTime.isPresent()) {
+            return ResponseEntity.ok(workTime.get().getUser());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     /**
      * @param worktimeDto
      * @return adds a new worktime
      * */
     @PostMapping("")
     public ResponseEntity<WorkTime> post(@RequestBody WorktimeDto worktimeDto) {
-
         Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
         if (optionalUser.isPresent()) {
             WorkTime savedWorkTime = workTimeRepository.save(mapFromDtoToEntity(worktimeDto));
@@ -95,10 +101,11 @@ public class WorkTimeController {
     @PutMapping("/{id}")
     public ResponseEntity<WorkTime> put(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
         Optional<WorkTime> oWorkTime = workTimeRepository.findById(id);
-        if (oWorkTime.isPresent()) {
+        Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
+        if (oWorkTime.isPresent() &&optionalUser.isPresent()) {
             return ResponseEntity.ok(workTimeRepository.save(modifyEntityWithDto(worktimeDto, oWorkTime.get())));
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -117,18 +124,5 @@ public class WorkTimeController {
         }
     }
 
-    /**
-     * @param id
-     * @return return the user of the worktime, if it exists
-     */
 
-    @GetMapping("/{id}/user")
-    public ResponseEntity<User> getUser(@PathVariable Integer id) {
-        Optional<WorkTime> workTime = workTimeRepository.findById(id);
-        if (workTime.isPresent()) {
-            return ResponseEntity.ok(workTime.get().getUser());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
