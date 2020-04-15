@@ -24,7 +24,7 @@ public class Sale {
     @Column(nullable = false)
     private Date date;
 
-    @Column(nullable = false)
+    @Column
     private String buyer;
 
     @Column(nullable = false)

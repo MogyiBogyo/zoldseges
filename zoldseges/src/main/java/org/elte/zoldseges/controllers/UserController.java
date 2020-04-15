@@ -111,12 +111,14 @@ public class UserController {
     }
 
     private User mapFromDtoToEntity(UserDto userDto) {
+
         return new User(
                 userDto.getFamilyname(),
                 userDto.getGivenname(),
                 userDto.getUsername(),
                 userDto.getEmail(),
                 passwordEncoder.encode(userDto.getPassword()),
+                userDto.getRole(),
                 userDto.getWorkTimeList());
     }
 

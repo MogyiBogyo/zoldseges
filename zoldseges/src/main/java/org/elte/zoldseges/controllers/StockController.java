@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -57,6 +58,8 @@ public class StockController {
     }
 
 
+
+
     @GetMapping("/{id}/product")
     public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
         Optional<Stock> stockOptional = stockRepository.findById(id);
@@ -99,6 +102,22 @@ public class StockController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    //olyan endponint ami productid alapján modositja a stockot
+    @PutMapping("/product/{productId}")
+    public ResponseEntity<Stock> putNewQuantity(@RequestBody StockDto stockDto, @PathVariable Integer productId){
+        List<Stock> foundedStock = stockRepository.findByProductId(productId);
+        if(!foundedStock.isEmpty()){
+            Stock stock = foundedStock.get(0);
+            Integer originalQuantity = stock.getQuantity();
+            stock.setQuantity(originalQuantity + stockDto.getQuantity());
+            return ResponseEntity.ok( stockRepository.save(stock));
+        } else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 
     /**
      * @param id
