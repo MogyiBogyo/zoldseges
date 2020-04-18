@@ -90,7 +90,7 @@ public class UserController {
 
 
     @GetMapping("/{id}/worktimes")
-    public ResponseEntity<Iterable<WorkTime>> worktimes(@PathVariable Integer id) {
+    public ResponseEntity<Iterable<WorkTime>> getWorktimes(@PathVariable Integer id) {
         Optional<User> oUser = userRepository.findById(id);
         if (oUser.isPresent()) {
             return ResponseEntity.ok(oUser.get().getWorkTimeList());

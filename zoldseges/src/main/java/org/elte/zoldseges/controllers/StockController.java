@@ -6,6 +6,7 @@ import org.elte.zoldseges.entities.Stock;
 import org.elte.zoldseges.repositories.ProductRepository;
 import org.elte.zoldseges.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,6 +112,24 @@ public class StockController {
             Stock stock = foundedStock.get(0);
             Integer originalQuantity = stock.getQuantity();
             stock.setQuantity(originalQuantity + stockDto.getQuantity());
+            return ResponseEntity.ok( stockRepository.save(stock));
+        } else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @PutMapping("/product/decrease/{productId}")
+    public ResponseEntity<Stock> decreaseQuantity(@RequestBody StockDto stockDto, @PathVariable Integer productId){
+        List<Stock> foundedStock = stockRepository.findByProductId(productId);
+        if(!foundedStock.isEmpty()){
+            Stock stock = foundedStock.get(0);
+            int originalQuantity = stock.getQuantity();
+            if(originalQuantity >= stockDto.getQuantity()){
+                stock.setQuantity(originalQuantity - stockDto.getQuantity());
+            } else {
+                return  ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
             return ResponseEntity.ok( stockRepository.save(stock));
         } else{
             return ResponseEntity.notFound().build();

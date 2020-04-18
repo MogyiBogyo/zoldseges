@@ -88,6 +88,15 @@ public class User {
         this.enable = true;
         this.workTimeList = workTimeList;
     }
+    public User(String familyname, String givenname, String username, String email, String password, Role role) {
+        this.familyname = familyname;
+        this.givenname = givenname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.enable = true;
+    }
 
     @Override
     public String toString() {

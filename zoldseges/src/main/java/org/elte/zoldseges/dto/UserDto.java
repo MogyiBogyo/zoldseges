@@ -1,6 +1,7 @@
 package org.elte.zoldseges.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.elte.zoldseges.entities.User;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class UserDto {
     private Integer id;
