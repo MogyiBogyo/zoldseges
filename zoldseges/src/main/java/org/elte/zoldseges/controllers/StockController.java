@@ -125,9 +125,13 @@ public class StockController {
         if(!foundedStock.isEmpty()){
             Stock stock = foundedStock.get(0);
             int originalQuantity = stock.getQuantity();
-            if(originalQuantity >= stockDto.getQuantity()){
+            if(originalQuantity > stockDto.getQuantity()){
                 stock.setQuantity(originalQuantity - stockDto.getQuantity());
-            } else {
+            } else if(originalQuantity == stockDto.getQuantity()){
+                stockRepository.deleteById(stock.getId());
+                return ResponseEntity.ok().build();
+            }
+            else {
                 return  ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
             return ResponseEntity.ok( stockRepository.save(stock));

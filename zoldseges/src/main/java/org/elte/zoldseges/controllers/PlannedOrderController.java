@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,29 +25,16 @@ public class PlannedOrderController {
 
 
     private PlannedOrder mapFromDtoToEntity(PlannedOrderDto plannedOrderDto) {
-        Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
-        if (optionalProduct.isPresent()) {
             return new PlannedOrder(
                     plannedOrderDto.getQuantity(),
-                    optionalProduct.get()
+                    productRepository.findById(plannedOrderDto.getProductId()).get()
             );
-        } else {
-            return new PlannedOrder(
-                    plannedOrderDto.getQuantity(),
-                    null
-            );
-        }
     }
 
-    private PlannedOrder modifyEntityWithDto(PlannedOrderDto plannedOrderDto, PlannedOrder findedPOrder) {
-        Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
-        if (optionalProduct.isPresent()) {
-            findedPOrder.setQuantity(plannedOrderDto.getQuantity());
-            findedPOrder.setProduct(optionalProduct.get());
-        } else {
-            findedPOrder.setQuantity(plannedOrderDto.getQuantity());
-        }
-        return findedPOrder;
+    private PlannedOrder modifyEntityWithDto(PlannedOrderDto plannedOrderDto, PlannedOrder findedOrder) {
+            findedOrder.setQuantity(plannedOrderDto.getQuantity());
+            findedOrder.setProduct(productRepository.findById(plannedOrderDto.getProductId()).get());
+        return findedOrder;
     }
 
 
@@ -106,6 +94,26 @@ public class PlannedOrderController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    /**
+     * @param plannedOrderDto a simple dto
+     * @param productId id of a product
+     * @return  find a plannes order by product id, and modify it's quantity
+     */
+    @PutMapping("/product/{productId}")
+    public ResponseEntity<PlannedOrder> putPlannedOrderOrModifyOne (@RequestBody PlannedOrderDto plannedOrderDto,@PathVariable Integer productId){
+        List<PlannedOrder> foundedPlannedOrder = plannedOrderRepository.findByProductId(productId);
+        if(!foundedPlannedOrder.isEmpty()){
+            PlannedOrder plannedOrder = foundedPlannedOrder.get(0);
+            Integer originalQuantity = plannedOrder.getQuantity();
+            plannedOrder.setQuantity(originalQuantity + plannedOrderDto.getQuantity());
+            return ResponseEntity.ok(plannedOrderRepository.save(plannedOrder));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     /**
      * @param id
