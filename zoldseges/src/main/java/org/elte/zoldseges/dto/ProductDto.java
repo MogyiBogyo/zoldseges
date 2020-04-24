@@ -1,6 +1,7 @@
 package org.elte.zoldseges.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.elte.zoldseges.entities.Income;
@@ -11,6 +12,7 @@ import org.elte.zoldseges.entities.Stock;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDto {

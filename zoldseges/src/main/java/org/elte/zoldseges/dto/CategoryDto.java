@@ -1,6 +1,7 @@
 package org.elte.zoldseges.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.elte.zoldseges.entities.Product;
@@ -8,6 +9,7 @@ import org.elte.zoldseges.entities.Product;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
@@ -42,4 +44,6 @@ public class CategoryDto {
         this.isSale = isSale;
         this.productList = null;
     }
+
+
 }

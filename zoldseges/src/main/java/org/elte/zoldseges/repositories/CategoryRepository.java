@@ -10,8 +10,5 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Optional<Category> findByName(String name);
-    List<Category> findBySalePrice(Integer price);
-
-    Category findByIsSale(boolean isSale);
 
 }

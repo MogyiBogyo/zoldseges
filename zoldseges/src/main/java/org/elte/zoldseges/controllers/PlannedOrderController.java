@@ -76,8 +76,14 @@ public class PlannedOrderController {
      */
     @PostMapping("")
     public ResponseEntity<PlannedOrder> post(@RequestBody PlannedOrderDto plannedOrderDto) {
-        PlannedOrder savedPlan = plannedOrderRepository.save(mapFromDtoToEntity(plannedOrderDto));
-        return ResponseEntity.ok(savedPlan);
+        Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
+        if(optionalProduct.isPresent()){
+            PlannedOrder savedPlan = plannedOrderRepository.save(mapFromDtoToEntity(plannedOrderDto));
+            return ResponseEntity.ok(savedPlan);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     /**
@@ -88,7 +94,8 @@ public class PlannedOrderController {
     @PutMapping("/{id}")
     public ResponseEntity<PlannedOrder> put(@RequestBody PlannedOrderDto plannedOrderDto, @PathVariable Integer id) {
         Optional<PlannedOrder> optionalPlannedOrder = plannedOrderRepository.findById(id);
-        if (optionalPlannedOrder.isPresent()) {
+        Optional<Product> optionalProduct = productRepository.findById(plannedOrderDto.getProductId());
+        if (optionalPlannedOrder.isPresent() && optionalProduct.isPresent()) {
             return ResponseEntity.ok(plannedOrderRepository.save(modifyEntityWithDto(plannedOrderDto, optionalPlannedOrder.get())));
         } else {
             return ResponseEntity.notFound().build();

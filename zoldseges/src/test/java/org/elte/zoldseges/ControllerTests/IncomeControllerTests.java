@@ -1,7 +1,8 @@
 package org.elte.zoldseges.ControllerTests;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elte.zoldseges.dto.UserDto;
+import org.elte.zoldseges.dto.IncomeDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,12 +14,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
+
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class IncomeControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,147 +38,126 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllUsers() throws Exception {
+    public void shouldGetAllIncomes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users"))
+                .get("/incomes"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
-
-
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetUserById() throws Exception {
+    public void shouldGetIncomeById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/1"))
+                .get("/incomes/1"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFailToGetUserById() throws Exception {
+    public void shouldFailToGetIncomeById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/9999"))
+                .get("/incomes/9999"))
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldGetUserWorktimes() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/1/worktimes"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
-    }
-
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFailGetUserWorktimes() throws Exception {
+    public void shouldDeleteIncomeById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/9999/worktimes"))
-                .andExpect(status().isNotFound());
-
-    }
-
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldDeleteUserById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/users/4"))
+                .delete("/incomes/4"))
                 .andExpect(status().isOk());
     }
 
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFailDeleteUserById() throws Exception {
+    public void shouldFailDeleteIncomeById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/users/999"))
+                .delete("/incomes/999"))
                 .andExpect(status().isNotFound());
     }
 
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldCreateNewUser() throws Exception {
+    public void shouldCreateNewIncome() throws Exception {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("2020/03/04");
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/users")
+                .post("/incomes")
                 .content(jsonToString(
-                        UserDto.builder()
-                                .username("cica")
-                                .password("mica")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
+                        IncomeDto.builder()
+                                .date(date)
+                                .quantity(22)
+                                .seller("Kis Kinga")
+                                .price(125)
+                                .productId(1)
                                 .build()
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldFailToCreateNewUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/users")
-                .content(jsonToString(
-                        UserDto.builder()
-                                .username("Pistike")
-                                .password("mica")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
-                                .build()
-                ))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldUpdateUser() throws Exception {
+    public void shouldFailToCreateNewIncome() throws Exception {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("2020/03/04");
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/users/1")
+                .post("/incomes")
                 .content(jsonToString(
-                        UserDto.builder()
-                                .username("Pistike")
-                                .password("password")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
-                                .build()
-                ))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("ci@ca.com"));
-    }
-
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldFailToUpdateUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .put("/users/9999")
-                .content(jsonToString(
-                        UserDto.builder()
-                                .username("Pistike")
-                                .password("password")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
+                        IncomeDto.builder()
+                                .date(date)
+                                .quantity(22)
+                                .seller("Kis Kinga")
+                                .price(125)
+                                .productId(9999)
                                 .build()
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldUpdateIncome() throws Exception {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("2021/12/12");
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/incomes/1")
+                .content(jsonToString(
+                        IncomeDto.builder()
+                                .date(date)
+                                .quantity(22)
+                                .seller("Kis Kinga")
+                                .price(125)
+                                .productId(1)
+                                .build()
+                ))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.seller").value("Kis Kinga"));
+    }
+
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void shouldFailToUpdateIncome() throws Exception {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("2021/12/12");
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/incomes/9999").content(jsonToString(
+                        IncomeDto.builder()
+                                .date(date)
+                                .quantity(22)
+                                .seller("Kis Kinga")
+                                .price(125)
+                                .productId(1)
+                                .build()
+                ))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
 
 }

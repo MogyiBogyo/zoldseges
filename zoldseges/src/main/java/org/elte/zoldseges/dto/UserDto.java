@@ -51,4 +51,14 @@ public class UserDto {
         this.role = User.Role.ROLE_WORKER;
         this.workTimeList = null;
     }
+
+    public UserDto(String familyname, String givenname, String username, String email, String password, User.Role role) {
+        this.familyname = familyname;
+        this.givenname = givenname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.workTimeList = null;
+        this.role = role;
+    }
 }

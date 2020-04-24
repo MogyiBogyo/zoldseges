@@ -1,7 +1,7 @@
 package org.elte.zoldseges.ControllerTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elte.zoldseges.dto.UserDto;
+import org.elte.zoldseges.dto.CategoryDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,13 +12,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class CategoryControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,42 +30,38 @@ public class UserControllerTest {
         }
     }
 
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllUsers() throws Exception {
+    public void shouldGetAllCategories() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users"))
+                .get("/categories"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
-
-
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetUserById() throws Exception {
+    public void shouldGetCategoryById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/1"))
+                .get("/categories/1"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFailToGetUserById() throws Exception {
+    public void shouldFailToGetCategoryById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/9999"))
+                .get("/categories/9999"))
                 .andExpect(status().isNotFound());
     }
 
+
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetUserWorktimes() throws Exception {
+    public void shouldGetProductsOfCategoryByCategoryId() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/1/worktimes"))
+                .get("/categories/productlist/1"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
@@ -74,107 +69,97 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFailGetUserWorktimes() throws Exception {
+    public void shouldFailToGetProductsOfCategoryByCategoryId() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/9999/worktimes"))
+                .get("/categories/productlist/99999"))
                 .andExpect(status().isNotFound());
-
     }
+
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldDeleteUserById() throws Exception {
+    public void shouldDeleteCategoryById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/users/4"))
+                .delete("/categories/4"))
                 .andExpect(status().isOk());
     }
 
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFailDeleteUserById() throws Exception {
+    public void shouldFailDeleteCategoryById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/users/999"))
+                .delete("/categories/999"))
                 .andExpect(status().isNotFound());
     }
 
-
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldCreateNewUser() throws Exception {
+    public void shouldCreateNewCategory() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/users")
+                .post("/categories")
                 .content(jsonToString(
-                        UserDto.builder()
-                                .username("cica")
-                                .password("mica")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
+                        CategoryDto.builder()
+                                .name("testCategory")
+                                .isSale(false)
+                                .salePrice(125)
                                 .build()
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
+
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldFailToCreateNewUser() throws Exception {
+    public void shouldFailCreateNewCategory() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/users")
+                .post("/categories")
                 .content(jsonToString(
-                        UserDto.builder()
-                                .username("Pistike")
-                                .password("mica")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
+                        CategoryDto.builder()
+                                .name("gyümölcs")
+                                .isSale(false)
+                                .salePrice(125)
                                 .build()
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
-
     @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldUpdateUser() throws Exception {
+    @WithMockUser(roles = "USER")
+    public void shouldUpdateCategory() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/users/1")
+                .put("/categories/1")
                 .content(jsonToString(
-                        UserDto.builder()
-                                .username("Pistike")
-                                .password("password")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
+                        CategoryDto.builder()
+                                .name("gyümiUpdated")
+                                .salePrice(123)
+                                .isSale(true)
                                 .build()
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("ci@ca.com"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("gyümiUpdated"));
     }
 
+
     @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldFailToUpdateUser() throws Exception {
+    @WithMockUser(roles = "USER")
+    public void shouldFailToUpdateCategory() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/users/9999")
-                .content(jsonToString(
-                        UserDto.builder()
-                                .username("Pistike")
-                                .password("password")
-                                .email("ci@ca.com")
-                                .familyname("Nagy")
-                                .givenname("Lajos")
-                                .enable(true)
+                .put("/categories/9999").content(jsonToString(
+                        CategoryDto.builder()
+                                .name("gyümiUpdated")
+                                .salePrice(123)
+                                .isSale(true)
                                 .build()
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+
+
 
 }

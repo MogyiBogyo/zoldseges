@@ -111,7 +111,6 @@ public class UserController {
     }
 
     private User mapFromDtoToEntity(UserDto userDto) {
-
         return new User(
                 userDto.getFamilyname(),
                 userDto.getGivenname(),
