@@ -59,7 +59,7 @@ public class UserController {
 
     @GetMapping("/disabled")
     public ResponseEntity<Iterable<User>> getAllDisabled(Authentication auth) {
-        Optional<User> loggedInUser = userRepository.findByEmail(auth.getName());
+        Optional<User> loggedInUser = userRepository.findByUsername(auth.getName());
         if (loggedInUser.isPresent()) {
             if (loggedInUser.get().getRole().equals(User.Role.ROLE_ADMIN)) {
                 return ResponseEntity.ok(userRepository.findByEnable(false));

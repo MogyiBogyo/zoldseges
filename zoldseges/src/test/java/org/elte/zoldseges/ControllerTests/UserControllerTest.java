@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,13 +35,20 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    public void shouldFailToGetAllDisabledUsers() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/users/disabled"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     public void shouldGetAllUsers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
-
 
 
 
@@ -101,6 +109,46 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    public void shouldRegisterNewUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/users/register")
+                .content(jsonToString(
+                        UserDto.builder()
+                                .username("cica")
+                                .password("mica")
+                                .email("ci@ca.com")
+                                .familyname("Nagy")
+                                .givenname("Lajos")
+                                .enable(true)
+                                .build()
+                ))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
+    }
+
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldFailToRegisterNewUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/users/register")
+                .content(jsonToString(
+                        UserDto.builder()
+                                .username("Pistike")
+                                .password("mica")
+                                .email("ci@ca.com")
+                                .familyname("Nagy")
+                                .givenname("Lajos")
+                                .enable(true)
+                                .build()
+                ))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     public void shouldCreateNewUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/users")
@@ -118,6 +166,8 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
+
+
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldFailToCreateNewUser() throws Exception {
@@ -176,5 +226,26 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldFailToMakeAdminUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/users/9999/makeAdmin")
+                .content(jsonToString(
+                        UserDto.builder()
+                                .username("Pistike")
+                                .password("password")
+                                .email("ci@ca.com")
+                                .familyname("Nagy")
+                                .givenname("Lajos")
+                                .enable(true)
+                                .build()
+                ))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
 
 }
