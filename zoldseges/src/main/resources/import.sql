@@ -18,6 +18,7 @@ insert into Product(name, price, sale_price, category_id, is_sale ) values ('ban
 insert into Product(name, price, sale_price, category_id, is_sale ) values ('alma', 300, 250, 2, true);
 insert into Product(name, price, sale_price, category_id, is_sale ) values ('dió', 1500, 1330, 3, false);
 insert into Product(name, price, sale_price, category_id, is_sale ) values ('uborka', 220, 199, 1, false);
+insert into Product(name, price, sale_price, category_id, is_sale ) values ('forTest', 220, 199, 1, false);
 
 INSERT INTO stock(product_id, quantity) values (1, 30);
 INSERT INTO stock(product_id, quantity) values (2, 55);

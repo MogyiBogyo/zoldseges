@@ -80,9 +80,9 @@ public class ProductController {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
             return ResponseEntity.ok(optionalProduct.get().getCategory());
-        } else {
-            return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -92,12 +92,15 @@ public class ProductController {
     @PostMapping("")
     public ResponseEntity<Product> post(@RequestBody ProductDto productDto) {
         Optional<Product> optionalProduct = productRepository.findByName(productDto.getName());
-        if(optionalProduct.isPresent()){
+        Optional<Category> optionalCategory = categoryRepository.findById(productDto.getCategoryId());
+        if(optionalProduct.isPresent() ){
+            return ResponseEntity.badRequest().build();
+        } else if(!optionalCategory.isPresent()) {
             return ResponseEntity.notFound().build();
-        }else {
-            Product savedProduct = productRepository.save(mapFromDtoToEntity(productDto));
-            return ResponseEntity.ok(savedProduct);
         }
+
+        Product savedProduct = productRepository.save(mapFromDtoToEntity(productDto));
+        return ResponseEntity.ok(savedProduct);
     }
 
     /**
