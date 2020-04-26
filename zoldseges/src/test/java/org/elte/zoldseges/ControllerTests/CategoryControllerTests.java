@@ -80,7 +80,7 @@ public class CategoryControllerTests {
     @WithMockUser(roles = "ADMIN")
     public void shouldDeleteCategoryById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/categories/4"))
+                .delete("/categories/5"))
                 .andExpect(status().isOk());
     }
 
@@ -90,7 +90,7 @@ public class CategoryControllerTests {
     public void shouldFailDeleteCategoryById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .delete("/categories/999"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test

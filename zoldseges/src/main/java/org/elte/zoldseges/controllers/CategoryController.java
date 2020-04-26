@@ -122,7 +122,7 @@ public class CategoryController {
             categoryRepository.deleteById(id);
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 }

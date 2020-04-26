@@ -80,7 +80,7 @@ public class ProductControllerTest {
     @WithMockUser(roles = "ADMIN")
     public void shouldDeleteProductById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/products/5"))
+                .delete("/products/15"))
                 .andExpect(status().isOk());
     }
 

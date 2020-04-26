@@ -38,7 +38,9 @@ public class UserController {
         findedUser.setGivenname(userDto.getGivenname());
         findedUser.setUsername(userDto.getUsername());
         findedUser.setEmail(userDto.getEmail());
-        findedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        if(userDto.getPassword() != null){
+            findedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
         findedUser.setRole(userDto.getRole());
         return findedUser;
     }
