@@ -1,7 +1,6 @@
 package org.elte.zoldseges.ControllerTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elte.zoldseges.dto.IncomeDto;
 import org.elte.zoldseges.dto.ProductDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,19 +76,19 @@ public class ProductControllerTest {
 
 
     @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldDeleteProductById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/products/15"))
-                .andExpect(status().isOk());
-    }
+        @WithMockUser(roles = "ADMIN")
+        public void shouldDeleteProductById() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders
+                    .delete("/products/15"))
+                    .andExpect(status().isOk());
+        }
 
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldFailDeleteProductById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/products/999"))
-                .andExpect(status().isNotFound());
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        public void shouldFailDeleteProductById() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders
+                    .delete("/products/999"))
+                    .andExpect(status().isNotFound());
     }
 
 

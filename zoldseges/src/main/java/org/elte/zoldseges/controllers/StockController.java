@@ -8,10 +8,12 @@ import org.elte.zoldseges.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/stocks")
@@ -104,7 +106,7 @@ public class StockController {
         }
     }
 
-    //olyan endponint ami productid alapján modositja a stockot
+
     @PutMapping("/product/{productId}")
     public ResponseEntity<Stock> putNewQuantity(@RequestBody StockDto stockDto, @PathVariable Integer productId){
         List<Stock> foundedStock = stockRepository.findByProductId(productId);

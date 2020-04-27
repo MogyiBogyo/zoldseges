@@ -33,24 +33,32 @@ public class UserControllerTest {
     }
 
 
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void shouldFailToGetAllDisabledUsers() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/users/disabled"))
-                .andExpect(status().isNotFound());
-    }
+
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void shouldGetAllUsers() throws Exception {
+    public void shouldGetAllEnabledUsers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldGetAllDisabledUsers() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/users/disabled"))
+                .andExpect(status().isOk());
+    }
 
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldGetAllUsers() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/users/all"))
+                .andExpect(status().isOk());
+    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
