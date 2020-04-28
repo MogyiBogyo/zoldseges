@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * Allocates the "/incomes" endpoint to control incomes
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/incomes")
@@ -22,7 +25,11 @@ public class IncomeController {
     @Autowired
     private ProductRepository productRepository;
 
-
+    /**
+     * Creates a new Income Entity from DTO
+     * @param incomeDto data transfer object
+     * @return a new Income
+     */
     private Income mapFromDtoToEntity(IncomeDto incomeDto) {
             return new Income(
                     incomeDto.getQuantity(),
@@ -34,6 +41,12 @@ public class IncomeController {
 
     }
 
+    /**
+     * Modify a Income with DTO's data
+     * @param incomeDto data transfer object
+     * @param founded Income for modify
+     * @return an updated Income
+     */
     private Income modifyEntityWithDto(IncomeDto incomeDto, Income founded) {
         founded.setQuantity(incomeDto.getQuantity());
         founded.setDate(incomeDto.getDate());
@@ -45,7 +58,8 @@ public class IncomeController {
 
 
     /**
-     * @return all Income
+     * Returns all the Income
+     * @return ResponseEntity of Income
      */
     @GetMapping("")
     public ResponseEntity<Iterable<Income>> getAll() {
@@ -54,8 +68,9 @@ public class IncomeController {
 
 
     /**
-     * @param id
-     * @return income date with this id
+     * Returns a Income by ID
+     * @param id Id of an Income
+     * @return ResponseEntity of a Income
      */
     @GetMapping("/{id}")
     public ResponseEntity<Income> get(@PathVariable Integer id) {
@@ -68,8 +83,9 @@ public class IncomeController {
     }
 
     /**
-     * @param incomeDto
-     * @return add a new income
+     * Creates a new Income
+     * @param incomeDto The IncomeDto Object to add to DB (e.g.: JSON)
+     * @return ResponseEntity of newly created Income
      */
     @PostMapping("")
     public ResponseEntity<Income> post(@RequestBody IncomeDto incomeDto) {
@@ -84,9 +100,11 @@ public class IncomeController {
     }
 
     /**
-     * @param incomeDto
-     * @param id
-     * @return modify an income with this id, if it exists
+     * Updates a Income by ID
+     * @param id Id of Income which to modify
+     * @param incomeDto The Income Object to add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated Income
+     * Returns Not Found if Income doesn't exist.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Income> put(@RequestBody IncomeDto incomeDto, @PathVariable Integer id) {
@@ -99,8 +117,10 @@ public class IncomeController {
     }
 
     /**
-     * @param id
-     * @return deletes an income with this id, if it exists
+     * Deletes a Income by Income ID
+     * @param id ID of Income
+     * @return ResponseEntity
+     * Returns Not Found if Income doesn't exists
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {

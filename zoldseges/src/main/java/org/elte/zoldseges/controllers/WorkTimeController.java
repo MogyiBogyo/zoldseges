@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+
+/**
+ * Allocates the "/worktimes" endpoint to control worktimes
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/worktimes")
@@ -21,8 +25,13 @@ public class WorkTimeController {
     @Autowired
     private UserRepository userRepository;
 
-    private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto) {
 
+    /**
+     * Creates a new WorkTime Entity from DTO
+     * @param worktimeDto data transfer object
+     * @return a new WorkTime
+     */
+    private WorkTime mapFromDtoToEntity(WorktimeDto worktimeDto) {
         return new WorkTime(
                 worktimeDto.getDate(),
                 worktimeDto.getStartHour(),
@@ -30,6 +39,12 @@ public class WorkTimeController {
                 userRepository.findById(worktimeDto.getUserId()).get());
     }
 
+    /**
+     * Modify a WorkTime with DTO's data
+     * @param worktimeDto data transfer object
+     * @param foundedWorktime WorkTime for modify
+     * @return an updated WorkTime
+     */
     private WorkTime modifyEntityWithDto(WorktimeDto worktimeDto, WorkTime foundedWorktime) {
         foundedWorktime.setDate(worktimeDto.getDate());
         foundedWorktime.setStartHour(worktimeDto.getStartHour());
@@ -40,7 +55,8 @@ public class WorkTimeController {
     }
 
     /**
-     * @return all worktime
+     * Returns all the WorkTimes
+     * @return ResponseEntity of WorkTimes
      */
     @GetMapping("")
     public ResponseEntity<Iterable<WorkTime>> getAll() {
@@ -48,8 +64,10 @@ public class WorkTimeController {
     }
 
     /**
-     * @param id
-     * @return retun 1 worktime with this id, if the id exists
+     * Returns a WorkTime by ID
+     * @param id Id of WorkTime
+     * @return ResponseEntity of a WorkTime
+     * Returns Not Found if WorkTime doesn't exists
      */
     @GetMapping("/{id}")
     public ResponseEntity<WorkTime> get(@PathVariable Integer id) {
@@ -63,10 +81,11 @@ public class WorkTimeController {
 
 
     /**
-     * @param id
-     * @return return the user of the worktime, if it exists
+     * Returns a User of a Worktime by Worktime ID
+     * @param id Id of WorkTime
+     * @return ResponseEntity of a User
+     * Returns Not Found if WorkTime doesn't exists
      */
-
     @GetMapping("/{id}/user")
     public ResponseEntity<User> getUser(@PathVariable Integer id) {
         Optional<WorkTime> workTime = workTimeRepository.findById(id);
@@ -78,9 +97,10 @@ public class WorkTimeController {
     }
 
     /**
-     * @param worktimeDto
-     * @return adds a new worktime
-     * */
+     * Creates a new WorkTime
+     * @param worktimeDto The WorkTime data transfer Object to add to DB (e.g.: JSON)
+     * @return ResponseEntity of newly created WorkTime
+     */
     @PostMapping("")
     public ResponseEntity<WorkTime> post(@RequestBody WorktimeDto worktimeDto) {
         Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
@@ -94,15 +114,17 @@ public class WorkTimeController {
     }
 
     /**
-     * @param worktimeDto
-     * @param id
-     * @return modify a worktime if the id exists
+     * Updates a WorkTime by ID
+     * @param id Id of WorkTime which to modify
+     * @param worktimeDto The WorkTime data transfer Object to add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated WorkTime
+     * Returns Not Found if WorkTime or User doesn't exist.
      */
     @PutMapping("/{id}")
     public ResponseEntity<WorkTime> put(@RequestBody WorktimeDto worktimeDto, @PathVariable Integer id) {
         Optional<WorkTime> oWorkTime = workTimeRepository.findById(id);
         Optional<User> optionalUser = userRepository.findById(worktimeDto.getUserId());
-        if (oWorkTime.isPresent() &&optionalUser.isPresent()) {
+        if (oWorkTime.isPresent() && optionalUser.isPresent()) {
             return ResponseEntity.ok(workTimeRepository.save(modifyEntityWithDto(worktimeDto, oWorkTime.get())));
         } else {
             return ResponseEntity.notFound().build();
@@ -110,8 +132,10 @@ public class WorkTimeController {
     }
 
     /**
-     * @param id
-     * @return deletes a worktime with this id
+     * Deletes a WorkTime by WorkTime ID
+     * @param id ID of WorkTime
+     * @return ResponseEntity
+     * Returns Not Found if WorkTime doesn't exists
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {

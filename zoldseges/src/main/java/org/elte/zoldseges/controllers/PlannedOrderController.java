@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * Allocates the "/plans" endpoint to control planned orders
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/plans")
@@ -24,6 +26,11 @@ public class PlannedOrderController {
     private ProductRepository productRepository;
 
 
+    /**
+     * Creates a new PlannedOrder Entity from DTO
+     * @param plannedOrderDto data transfer object
+     * @return a new PlannedOrder
+     */
     private PlannedOrder mapFromDtoToEntity(PlannedOrderDto plannedOrderDto) {
             return new PlannedOrder(
                     plannedOrderDto.getQuantity(),
@@ -31,6 +38,12 @@ public class PlannedOrderController {
             );
     }
 
+    /**
+     * Modify a PlannedOrder with DTO's data
+     * @param plannedOrderDto data transfer object
+     * @param findedOrder PlannedOrder for modify
+     * @return an updated PlannedOrder
+     */
     private PlannedOrder modifyEntityWithDto(PlannedOrderDto plannedOrderDto, PlannedOrder findedOrder) {
             findedOrder.setQuantity(plannedOrderDto.getQuantity());
             findedOrder.setProduct(productRepository.findById(plannedOrderDto.getProductId()).get());
@@ -39,16 +52,19 @@ public class PlannedOrderController {
 
 
     /**
-     * @return all planned order
+     * Returns all the PlannedOrder
+     * @return ResponseEntity of PlannedOrders
      */
     @GetMapping("")
     public ResponseEntity<Iterable<PlannedOrder>> getAll() {
         return ResponseEntity.ok(plannedOrderRepository.findAll());
     }
 
+
     /**
-     * @param id
-     * @return plan with this id
+     * Returns a PlannedOrder by ID
+     * @param id Id of PlannedOrder
+     * @return ResponseEntity of a PlannedOrder
      */
     @GetMapping("/{id}")
     public ResponseEntity<PlannedOrder> get(@PathVariable Integer id) {
@@ -60,6 +76,11 @@ public class PlannedOrderController {
         }
     }
 
+    /**
+     * Returns a Product of a PlannedOrder
+     * @param id Id of PlannedOrder
+     * @return ResponseEntity of Product
+     */
     @GetMapping("/{id}/product")
     public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
         Optional<PlannedOrder> optionalPlannedOrder = plannedOrderRepository.findById(id);
@@ -71,8 +92,10 @@ public class PlannedOrderController {
     }
 
     /**
-     * @param plannedOrderDto
-     * @return add a new plan
+     * Creates a new PlannedOrder
+     * @param plannedOrderDto The PlannedOrder Object to add to DB (e.g.: JSON)
+     * @return ResponseEntity of newly created PlannedOrder
+     * Returns Not Found if Product from DTO doesn't exists
      */
     @PostMapping("")
     public ResponseEntity<PlannedOrder> post(@RequestBody PlannedOrderDto plannedOrderDto) {
@@ -87,9 +110,11 @@ public class PlannedOrderController {
     }
 
     /**
-     * @param plannedOrderDto
-     * @param id
-     * @return modify a plan if the id exists
+     * Updates a PlannedOrder by ID
+     * @param id Id of PlannedOrder which to modify
+     * @param plannedOrderDto The Group Object to add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated PlannedOrder
+     * Returns Not Found if PlannedOrder or Product doesn't exist.
      */
     @PutMapping("/{id}")
     public ResponseEntity<PlannedOrder> put(@RequestBody PlannedOrderDto plannedOrderDto, @PathVariable Integer id) {
@@ -104,9 +129,11 @@ public class PlannedOrderController {
 
 
     /**
-     * @param plannedOrderDto a simple dto
-     * @param productId id of a product
-     * @return  find a plannes order by product id, and modify it's quantity
+     * Updates a PlannedOrder or make new one
+     * @param productId Id of Product which to modify
+     * @param plannedOrderDto The PlannedOrderDto Object to add or modify PlannedOrder to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated Group
+     * Returns Not Found if Group doesn't exist.
      */
     @PutMapping("/product/{productId}")
     public ResponseEntity<PlannedOrder> putPlannedOrderOrModifyOne (@RequestBody PlannedOrderDto plannedOrderDto,@PathVariable Integer productId){
@@ -123,8 +150,10 @@ public class PlannedOrderController {
 
 
     /**
-     * @param id
-     * @return delet a plan if it exists
+     * Deletes a PlannedOrder by PlannedOrder ID
+     * @param id ID of PlannedOrder
+     * @return ResponseEntity
+     * Returns Not Found if Group doesn't exists
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {

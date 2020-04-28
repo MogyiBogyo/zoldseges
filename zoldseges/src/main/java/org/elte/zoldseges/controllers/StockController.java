@@ -8,13 +8,17 @@ import org.elte.zoldseges.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 
+
+
+/**
+ * Allocates the "/stocks" endpoint to control stocks
+ */
 @RestController
 @RequestMapping("/stocks")
 public class StockController {
@@ -24,12 +28,25 @@ public class StockController {
     @Autowired
     private ProductRepository productRepository;
 
+
+    /**
+     * Creates a new Stock Entity from DTO
+     * @param stockDto Stock transfer object
+     * @return a new Stock
+     */
     private Stock mapFromDtoToEntity(StockDto stockDto) {
             return new Stock(
                     productRepository.findById(stockDto.getProductId()).get(),
                     stockDto.getQuantity());
     }
 
+
+    /**
+     * Modify a Stock with DTO's data
+     * @param stockDto data transfer object
+     * @param foundedStock Stock for modify
+     * @return an updated Stock
+     */
     private Stock modifyEntityWithDto(StockDto stockDto, Stock foundedStock){
             foundedStock.setProduct(productRepository.findById(stockDto.getProductId()).get());
             foundedStock.setQuantity(stockDto.getQuantity());
@@ -39,16 +56,19 @@ public class StockController {
 
 
     /**
-     * @return all stock
+     * Returns all the Stocks
+     * @return ResponseEntity of Stocks
      */
     @GetMapping("")
     public ResponseEntity<Iterable<Stock>> getAll() {
         return ResponseEntity.ok(stockRepository.findAll());
     }
 
+
     /**
-     * @param id id from request
-     * @return stock data with this id
+     * Returns a Stock by ID
+     * @param id Id of Stock
+     * @return ResponseEntity of a Stock
      */
     @GetMapping("/{id}")
     public ResponseEntity<Stock> get(@PathVariable Integer id) {
@@ -61,8 +81,12 @@ public class StockController {
     }
 
 
-
-
+    /**
+     * Returns a Product of a Stock by Stock Id
+     * @param id Id of a Stock
+     * @return ResponseEntity of Product
+     * Returns Not Found if Stock doesn't exists
+     */
     @GetMapping("/{id}/product")
     public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
         Optional<Stock> stockOptional = stockRepository.findById(id);
@@ -75,8 +99,9 @@ public class StockController {
 
 
     /**
-     * @param stockDto
-     * @return add a new stock
+     * Creates a new Stock
+     * @param stockDto The Stock data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of newly created Stock
      */
     @PostMapping("")
     public ResponseEntity<Stock> post(@RequestBody StockDto stockDto) {
@@ -91,9 +116,11 @@ public class StockController {
 
 
     /**
-     * @param stockdto
-     * @param id
-     * @return modify a stock with this id, if it exists
+     * Updates a Stock by ID
+     * @param id Id of Stock which to modify
+     * @param stockdto The Stock data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated Stock
+     * Returns Not Found if Stock or Product doesn't exist.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Stock> put(@RequestBody StockDto stockdto, @PathVariable Integer id) {
@@ -106,7 +133,13 @@ public class StockController {
         }
     }
 
-
+    /**
+     * Updates a Stock with new quantity by Product Id
+     * @param productId Id of Product which Stock wanted to modify
+     * @param stockDto The Stock data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated Stock
+     * Returns Not Found if Stock doesn't exist.
+     */
     @PutMapping("/product/{productId}")
     public ResponseEntity<Stock> putNewQuantity(@RequestBody StockDto stockDto, @PathVariable Integer productId){
         List<Stock> foundedStock = stockRepository.findByProductId(productId);
@@ -121,6 +154,14 @@ public class StockController {
     }
 
 
+    /**
+     * Updates a Stock with decreased quantity by Product Id
+     * @param productId Id of Product which Stock wanted to modify
+     * @param stockDto The Stock data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated Stock
+     * Returns Not Found if Stock doesn't exist.
+     * Returns Conflict if Stock quantity to small.
+     */
     @PutMapping("/product/decrease/{productId}")
     public ResponseEntity<Stock> decreaseQuantity(@RequestBody StockDto stockDto, @PathVariable Integer productId){
         List<Stock> foundedStock = stockRepository.findByProductId(productId);
@@ -145,8 +186,10 @@ public class StockController {
 
 
     /**
-     * @param id
-     * @return delet a stock with this id, if it exists
+     * Deletes a Stock by Stock ID
+     * @param id ID of Stock
+     * @return ResponseEntity
+     * Returns Not Found if Stock doesn't exists
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {

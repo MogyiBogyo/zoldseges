@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * Allocates the "/categories" endpoint to control categories
+ */
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -29,7 +32,8 @@ public class CategoryController {
     private AuthenticatedUser authenticatedUser;
 
     /**
-     * @return return all category
+     * Returns all the Categories
+     * @return ResponseEntity of Categories
      */
     @GetMapping("")
     public ResponseEntity<Iterable<Category>> getAll() {
@@ -37,8 +41,9 @@ public class CategoryController {
     }
 
     /**
-     * @param id
-     * @return return a category with this id, if it exists
+     * Returns a Category by ID
+     * @param id Id of group
+     * @return ResponseEntity of a Category
      */
     @GetMapping("/{id}")
     public ResponseEntity<Category> get(@PathVariable Integer id) {
@@ -50,6 +55,11 @@ public class CategoryController {
         }
     }
 
+    /**
+     * Returns Products of a Category by Cateogtry Id
+     * @param id Id of Category
+     * @return ResponseEntity of Products
+     */
     @GetMapping("/productlist/{id}")
     public ResponseEntity<Iterable<Product>> getProducts(@PathVariable Integer id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
@@ -61,8 +71,9 @@ public class CategoryController {
     }
 
     /**
-     * @param categoryDto
-     * @return add a new category
+     * Creates a new Category
+     * @param categoryDto The Category data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of newly created Category
      */
     @PostMapping("")
     public ResponseEntity<Category> post(@RequestBody CategoryDto categoryDto) {
@@ -75,6 +86,12 @@ public class CategoryController {
         }
     }
 
+
+    /**
+     * Creates a new Category Entity from DTO
+     * @param categorydto The Category data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return a new Category
+     */
     private Category mapFromCategoryDtoToCategoryEntity(CategoryDto categorydto) {
         return new Category(
                 categorydto.getName(),
@@ -84,8 +101,11 @@ public class CategoryController {
     }
 
     /**
-     * @param id
-     * @return modify a category if id exists
+     * Updates a Category by ID
+     * @param id Id of Category which to modify
+     * @param categoryDto The Category data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated Category
+     * Returns Not Found if Category doesn't exist.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Category> put(@RequestBody CategoryDto categoryDto, @PathVariable Integer id) {
@@ -98,6 +118,13 @@ public class CategoryController {
         }
     }
 
+
+    /**
+     * Modify a Category with DTO's data
+     * @param categoryDto The Category data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @param foundedCategory  founded Category by name
+     * @return an updated Category
+     */
     private Category modifyEntityWithDto(CategoryDto categoryDto, Category foundedCategory) {
         foundedCategory.setName(categoryDto.getName());
         if(categoryDto.getSalePrice() == null){
@@ -105,16 +132,18 @@ public class CategoryController {
         }else {
             foundedCategory.setSalePrice(categoryDto.getSalePrice());
         }
-
         foundedCategory.setSale(categoryDto.isSale());
         foundedCategory.setProductList(categoryDto.getProductList());
         return foundedCategory;
     }
 
     /**
-     * @param id
-     * @return delete a category with this id, if it exists and does not contains any product
+     * Deletes a Category by Category ID
+     * @param id ID of Group
+     * @return ResponseEntity
+     * Returns Bad Request if Group is not deletable or if Category doesn't exists
      */
+
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);

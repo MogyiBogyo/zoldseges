@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * Allocates the "/sales" endpoint to control sales
+ */
 @RestController
 @RequestMapping("/sales")
 public class SaleController {
@@ -20,7 +23,11 @@ public class SaleController {
     @Autowired
     private ProductRepository productRepository;
 
-
+    /**
+     * Creates a new Sale Entity from DTO
+     * @param saleDto data transfer object
+     * @return a new Sale
+     */
     private Sale mapFromDtoToEntity(SaleDto saleDto) {
         return new Sale(
                 saleDto.getQuantity(),
@@ -31,6 +38,12 @@ public class SaleController {
 
     }
 
+    /**
+     * Modify a Sale with DTO's data
+     * @param saleDto data transfer object
+     * @param foundedSale Sale for modify
+     * @return an updated Sale
+     */
     private Sale modifyEntityWithDto(SaleDto saleDto, Sale foundedSale) {
         foundedSale.setBuyer(saleDto.getBuyer());
         foundedSale.setDate(saleDto.getDate());
@@ -42,7 +55,8 @@ public class SaleController {
     }
 
     /**
-     * @return all sale
+     * Returns all the Sales
+     * @return ResponseEntity of Sales
      */
     @GetMapping("")
     public ResponseEntity<Iterable<Sale>> getAll() {
@@ -50,8 +64,10 @@ public class SaleController {
     }
 
     /**
-     * @param id
-     * @return sale with this id
+     * Returns a Sale by ID
+     * @param id Id of Sale
+     * @return ResponseEntity of a Sale
+     * Returns Not Found if Sale doesn't exists
      */
     @GetMapping("/{id}")
     public ResponseEntity<Sale> get(@PathVariable Integer id) {
@@ -63,6 +79,12 @@ public class SaleController {
         }
     }
 
+    /**
+     * Returns a Product of a Sale by ID
+     * @param id Id of Sale
+     * @return ResponseEntity of a Sale
+     * Returns Not Found if Sale doesn't exists
+     */
     @GetMapping("/{id}/product")
     public ResponseEntity<Product> getProducts(@PathVariable Integer id) {
         Optional<Sale> optionalSale = saleRepository.findById(id);
@@ -74,8 +96,9 @@ public class SaleController {
     }
 
     /**
-     * @param saledto
-     * @return add a new sale
+     * Creates a new Sale
+     * @param saledto The Sale data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of newly created Sale
      */
     @PostMapping("")
     public ResponseEntity<Sale> post(@RequestBody SaleDto saledto) {
@@ -90,9 +113,11 @@ public class SaleController {
     }
 
     /**
-     * @param saledto
-     * @param id
-     * @return modify a sale if it exists
+     * Updates a Sale by ID
+     * @param id Id of Sale which to modify
+     * @param saledto The Sale data transfer Object to make Entity and add to DB (e.g.: JSON)
+     * @return ResponseEntity of the updated Sale
+     * Returns Not Found if Sale or Product doesn't exist.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Sale> put(@RequestBody SaleDto saledto, @PathVariable Integer id) {
@@ -106,8 +131,10 @@ public class SaleController {
     }
 
     /**
-     * @param id
-     * @return deletes a sale with this id, if it exists
+     * Deletes a Sale by Sale ID
+     * @param id ID of Sale
+     * @return ResponseEntity
+     * Returns Not Found if Sale doesn't exists
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
