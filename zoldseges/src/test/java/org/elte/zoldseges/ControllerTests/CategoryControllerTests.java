@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CategoryControllerTests {
@@ -110,6 +110,7 @@ public class CategoryControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
+    /*@Transactional
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldFailCreateNewCategory() throws Exception {
@@ -124,7 +125,7 @@ public class CategoryControllerTests {
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-    }
+    }*/
 
     @Test
     @WithMockUser(roles = "USER")
