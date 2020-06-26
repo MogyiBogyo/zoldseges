@@ -143,7 +143,6 @@ public class CategoryController {
      * @return ResponseEntity
      * Returns Bad Request if Group is not deletable or if Category doesn't exists
      */
-
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Integer id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);

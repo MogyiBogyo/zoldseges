@@ -170,7 +170,12 @@ public class UserController {
      */
     @PostMapping("login")
     public ResponseEntity login() {
-        return ResponseEntity.ok(authenticatedUser.getUser());
+        if(authenticatedUser.getUser().getUsername() != null){
+            return ResponseEntity.ok(authenticatedUser.getUser());
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
 
